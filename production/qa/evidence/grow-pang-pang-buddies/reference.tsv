@@ -1,0 +1,175 @@
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-19 18:14:57
+render	cheap
+webgl	ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)
+console	1083	[.WebGL-0x10c00534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	1083	[.WebGL-0x10c00534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	1083	[.WebGL-0x10c00534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	1083	[.WebGL-0x10c00534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"phase":"demo","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"pi
+scene	70	play
+state	70	play	{"t":0,"phase":"intro","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"p
+playinput	332	KeyD
+frame	3481	45c0b2c2
+frame	3482	49c3bfc9
+frame	3483	9b07ac2d
+frame	3484	9c728634
+frame	3485	5acfa4bd
+frame	3486	2bc38bf4
+frame	3487	d3ddd279
+frame	3488	baefbbb4
+frame	3489	6ec0ed51
+frame	3490	ae918c77
+frame	3491	c28bfafb
+frame	3492	7f9ff861
+frame	3493	8df435ab
+frame	3494	7cfef924
+frame	3495	909e873b
+frame	3496	c7c13e4c
+frame	3497	d530d0ef
+frame	3498	edbd6b96
+frame	3499	82c0ea5f
+frame	3500	5661dfe9
+frame	3501	e7581dcb
+frame	3502	93854933
+frame	3503	7c189090
+frame	3504	da8a276a
+frame	3505	f1885f3d
+frame	3506	a880b3b3
+frame	3507	4de6ec45
+frame	3508	d15e4d6b
+frame	3509	8a67922c
+frame	3510	e7ad55b7
+frame	3511	23486c1d
+frame	3512	9bda6ae7
+frame	3513	9708dc6
+frame	3514	8bc02374
+frame	3515	49b195e
+frame	3516	131aa94d
+frame	3517	defd820d
+frame	3518	74f52d77
+frame	3519	ee90b9d
+frame	3520	4a20a2cb
+frame	3521	661e5fa6
+frame	3522	33bb2e81
+frame	3523	ca93747
+frame	3524	2961cbed
+frame	3525	4ad86664
+frame	3526	68a0691
+frame	3527	bd0f584a
+frame	3528	388d84f0
+frame	3529	83e35151
+frame	3530	fd30aff6
+frame	3531	cf3b430d
+frame	3532	9145c747
+frame	3533	358abb65
+frame	3534	75831000
+frame	3535	52a01267
+frame	3536	7058766e
+frame	3537	451feb59
+frame	3538	2239c89
+frame	3539	12f62f72
+frame	3540	97e75dce
+frame	3541	f6077d1d
+frame	3542	6b35a270
+frame	3543	733967b3
+frame	3544	aacb8f0f
+frame	3545	51b8a323
+frame	3546	1043152e
+frame	3547	3c423dbe
+frame	3548	2d73eaa3
+frame	3549	d9b1d0a9
+frame	3550	51e81209
+frame	3551	ee6c91f5
+frame	3552	d0f94130
+frame	3553	1ddfa81d
+frame	3554	2a94a45
+frame	3555	a239618
+frame	3556	a63aae4c
+frame	3557	6aac7035
+frame	3558	d2d532eb
+frame	3559	870c0df6
+frame	3560	1479b08
+frame	3561	24b95a3a
+frame	3562	51742d40
+frame	3563	f355335
+frame	3564	a6c98aab
+frame	3565	a7f29713
+frame	3566	e9aef954
+frame	3567	3854e495
+frame	3568	4f256e92
+frame	3569	dcdbba4d
+frame	3570	6c7e3b93
+frame	3571	7294a078
+frame	3572	c80490c3
+frame	3573	b27ea000
+frame	3574	b4b03553
+frame	3575	df69b666
+frame	3576	b19ba4a1
+frame	3577	f969736c
+frame	3578	6b4c5f0e
+frame	3579	e0850ebc
+frame	3580	97ca3d10
+frame	3581	5d5c049
+frame	3582	539b858d
+frame	3583	c4cbef2e
+frame	3584	9e09e673
+frame	3585	99b02868
+frame	3586	5136f536
+frame	3587	3ed8b005
+frame	3588	75fe32d3
+frame	3589	9ce2f2ac
+frame	3590	fc8adc9
+frame	3591	7fd45faa
+frame	3592	74265545
+frame	3593	2d8a6762
+frame	3594	69571f7b
+frame	3595	b6d2b938
+frame	3596	dcb0bba7
+frame	3597	ff903069
+frame	3598	f48c6062
+frame	3599	2b06887a
+frame	3600	fd396770
+state	3600	play	{"t":58.83,"phase":"run","phaseT":55.42,"rt":55.42,"round":1,"rounds":3,"timeLeft":4.58,"stars":[0,0,0],"score":34,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":57,"spinDir":-1,"
+digits	log	900 34px "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif	proportional	9.996
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	3600	0.020	1.500
+frametime	59	88.1	182.4	900	59	59
+done	3600	play	stop	60.0	22774
+measured	1280x720
+text	play	html	496,29,549,45	16.3	14.19	inside	ROUND 1
+text	play	html	556,29,627,45	16.6	18.17	inside	몸풀기 디스코
+text	play	html	770,27,826,59	32.6	5.65	inside	0:05
+text	play	html	31,24,113,39	15.1	14.19	inside	ROUND 1 / 3
+text	play	html	47,47,78,62	15.8	18.17	inside	팀 별
+text	play	html	78,44,96,63	18.6	13.04	inside	34
+text	play	html	1126,26,1133,41	14.6	17.23	inside	P
+text	play	html	1140,26,1190,41	15.8	15.29	inside	일시정지
+text	play	html	1197,26,1206,41	14.6	17.23	inside	M
+text	play	html	83,647,108,664	17.4	18.17	inside	코코
+text	play	html	117,648,129,663	14.8	9.97	inside	P1
+text	play	html	83,666,120,681	15.0	18.17	inside	코 잡기
+text	play	html	127,666,158,681	15.0	17.23	inside	Space
+text	play	html	186,631,206,646	15.0	6.76	inside	탈락
+text	play	html	204,646,213,662	16.3	13.04	inside	0
+text	play	html	298,648,322,665	17.4	18.17	inside	삐삐
+text	play	html	332,648,355,663	14.8	8.23	inside	BOT
+text	play	html	298,666,318,681	15.0	18.17	inside	날기
+text	play	html	419,646,427,662	16.3	13.04	inside	9
+text	play	html	910,648,934,665	17.4	18.17	inside	무너
+text	play	html	944,648,967,663	14.8	8.23	inside	BOT
+text	play	html	910,666,954,681	15.0	18.17	inside	빨판 걷기
+text	play	html	1031,646,1039,662	16.3	13.04	inside	8
+text	play	html	1124,648,1148,665	17.4	18.17	inside	몽이
+text	play	html	1158,648,1181,663	14.8	8.23	inside	BOT
+text	play	html	1124,666,1168,681	15.0	18.17	inside	꼬리 낚기
+text	play	html	1241,646,1253,662	16.3	13.04	inside	17
+text	play	html	728,104,769,119	15.1	5.90	inside	DJ 여우
+text	play	html	728,119,894,136	17.7	17.23	inside	막판 스퍼트! 버틸 수 있을까~?
+screen	3600	play	7f55a5f7	drawn
+uncaught	0
+shot	/Users/jinseungim/development/dev-game/new-game9/production/qa/evidence/grow-pang-pang-buddies/reference.png	897455

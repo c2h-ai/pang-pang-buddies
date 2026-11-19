@@ -1,0 +1,2 @@
+stop	3600
+log	Space wait:0.4 Space wait:5 KeyD:1.5 Space:1.5 KeyW:1 KeyA:1 wait:20
