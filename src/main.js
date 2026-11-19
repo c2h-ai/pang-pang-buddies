@@ -1025,6 +1025,13 @@ function arcGeo(r0, r1, b0, b1, seg, uRep, planar) {
   g.setIndex(ix); g.computeVertexNormals(); return g;
 }
 
+const _jq = new THREE.Quaternion(), _je = new THREE.Euler();
+/** Shake the gamepads (and a phone) on a pang; strength 0..~1.5. */
+function rumble(k) {
+  const ms = Math.round(tune.rumble_ms * Math.min(1.5, k));
+  try { for (const g of (navigator.getGamepads ? navigator.getGamepads() : [])) if (g && g.vibrationActuator) g.vibrationActuator.playEffect('dual-rumble', { duration: ms, strongMagnitude: Math.min(1, 0.6 * k), weakMagnitude: Math.min(1, 0.9 * k) }); } catch (e) { /* no rumble here */ }
+  try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* no vibration here */ }
+}
 const World = (() => {
   let renderer, scene, camera, composer, city, envTex, canvasEl;
   const rigs = [], q = { tilt: new THREE.Quaternion() }, v3 = new THREE.Vector3(), v3b = new THREE.Vector3(), col = new THREE.Color();
@@ -1383,7 +1390,8 @@ const World = (() => {
     // the disc
     const kx = Math.sin(d.tiltDir), kz = -Math.cos(d.tiltDir);
     q.tilt.setFromAxisAngle(v3.set(kx, 0, kz), d.tilt);
-    discTilt.position.y = d.h; discTilt.quaternion.copy(q.tilt); discSpin.rotation.y = d.a;
+    discTilt.position.y = d.h; discTilt.quaternion.copy(q.tilt);
+    if (d.jolt > 0.01) { const j = d.jolt * tune.disc_wobble * Math.PI / 180; _jq.setFromEuler(_je.set(Math.sin(t * 43) * j, 0, Math.cos(t * 37) * j)); discTilt.quaternion.multiply(_jq); } discSpin.rotation.y = d.a;
     const tanT = Math.tan(d.tilt), cd = Math.cos(d.tiltDir), sd = Math.sin(d.tiltDir);
     const ctx = { t, dt, simT: s.t, pangT: s.pangT, disc: d, qTilt: q.tilt, surfY: (x, z) => d.h - tanT * (x * cd + z * sd) };
     for (let i = 0; i < DISC.SEGS; i++) {
@@ -1654,6 +1662,8 @@ const Sim = (() => {
     const tilt = (t) => { const dir = Math.floor(rng() * 4) * Math.PI / 2 + (rng() - 0.5) * 0.5; push(t - 1.2, 'tiltWarn', { dir }); push(t, 'tiltOn', { dir }); push(t + tune.tilt_hold, 'tiltOff'); };
     const scratch = t => push(t, 'scratch');
     const combo = (t, power) => pang(t, power, { more: comboN - 1, combo: 1 }); // 연속 팡팡: comboN hits, one every two beats
+    const turbo = t => { push(t - 1, 'say', { text: '터보 회전~! 꽉 잡아!' }); push(t, 'turbo', { w: top * tune.turbo_mult }); push(t + tune.turbo_hold, 'spin', { w: top }); };
+    const turboP = [tune.turbo_chance_r1, tune.turbo_chance_r2, tune.turbo_chance_r3][n - 1];
     const spot = (t, power) => { push(t - tune.spot_warn, 'spot'); pang(t, power, { spot: 1 }); };
     push(0, 'spin', { w: top * 0.5 });
     if (n === 1) {
@@ -1662,7 +1672,7 @@ const Sim = (() => {
       push(p1 + 3, 'spin', { w: top }); push(p1 + 3, 'say', { text: '속도 올립니다~' });
       pang(p2, 1, { teach: 1 });
       let t = p2 + gap, k = 0;
-      while (t < T - 9.5) { if (k === 2) combo(snap(t), 0.95); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
+      while (t < T - 9.5) { if (k === 2) combo(snap(t), 0.95); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); if (rng() < turboP) turbo(snap(t + gap * 0.5)); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
       push(T - 9, 'spin', { w: top * 1.25 }); push(T - 9, 'say', { text: '막판 스퍼트! 버틸 수 있을까~?' });
       pang(snap(T - 6.2), 1); pang(snap(T - 2.6), 1);
     } else if (n === 2) {
@@ -1678,6 +1688,7 @@ const Sim = (() => {
         else if (r < 0.74) { tilt(st); pang(snap(st + 1.6), 0.9); t += 1.2; }
         else if (r < 0.9) { scratch(st); pang(snap(st + 2.2), 0.95); t += 1.2; }
         else combo(st, 0.9);
+        if (rng() < turboP) turbo(snap(t + gap * 0.5));
         t += gap * (0.9 + rng() * 0.25); k++;
       }
       push(T - 9.5, 'spin', { w: top * 1.2 }); push(T - 9.5, 'say', { text: '10초 남았다! 버텨 봐~' });
@@ -1696,6 +1707,7 @@ const Sim = (() => {
         else if (r < 0.7) { tilt(st); pang(snap(st + 1.6), 0.95); t += 1.2; }
         else if (r < 0.85) { scratch(st); pang(snap(st + 2.2), 1); t += 1.2; }
         else combo(st, 0.95);
+        if (rng() < turboP) turbo(snap(t + gap * 0.5));
         t += gap * (0.9 + rng() * 0.25);
       }
       push(T - 9.5, 'spin', { w: top * 1.3 }); push(T - 9.5, 'say', { text: '마지막이다~! 다 떨어져라!' });
@@ -1713,6 +1725,7 @@ const Sim = (() => {
   function fire(s, c) {
     const d = s.disc, dj = s.dj;
     if (c.type === 'spin') d.wT = c.w * s.spinDir;
+    else if (c.type === 'turbo') { d.wT = c.w * s.spinDir; d.scratch = 0.6; callout(s, '터보!', 'warn'); sfx('scratch'); }
     else if (c.type === 'say') say(s, c.text);
     else if (c.type === 'ring') { s.tele = { at: c.at, start: s.rt, dur: Math.max(0.05, c.at - s.rt), fake: c.fake, quick: c.quick }; botsOnRing(s, c); }
     else if (c.type === 'count') { callout(s, ['하나!', '둘!', '셋!'][c.i - 1], 'count'); mood(s, 'count'); dj.count = c.i; sfx('count', c.i); }
@@ -1733,7 +1746,7 @@ const Sim = (() => {
   }
   function doPang(s, power, tgt, crit) {
     const d = s.disc;
-    s.pangT = s.t; d.hv += 5.2 * power; s.tele = null; mood(s, 'slam'); callout(s, crit ? '크리티컬 팡!' : '팡!', crit ? 'fail' : 'pang'); fx('pang', 0, 0, 0, power); sfx('pang', power);
+    s.pangT = s.t; d.hv += tune.disc_bounce * power; d.jolt = Math.min(1.6, (d.jolt || 0) + power); rumble(power * (crit ? 1.4 : 1)); s.tele = null; mood(s, 'slam'); callout(s, crit ? '크리티컬 팡!' : '팡!', crit ? 'fail' : 'pang'); fx('pang', 0, 0, 0, power); sfx('pang', power);
     if (crit) { fx('shake', 0, 0, 0, 1.1); sfx('gate'); }
     for (const a of s.animals) {
       const mult = power * (a.kind === tgt ? tune.spot_bonus : 1);
@@ -2095,7 +2108,7 @@ const Sim = (() => {
     const acc = (d.scratch > 0 ? tune.scratch_accel : tune.spin_accel) * dt; if (d.scratch > 0) d.scratch -= dt;
     d.w += clamp(d.wT - d.w, -acc, acc); d.a = (d.a + d.w * dt) % TAU;
     d.tilt += clamp(d.tiltT - d.tilt, -0.55 * dt, 0.55 * dt);
-    d.hv += (-d.h * 240 - d.hv * 15) * dt; d.h += d.hv * dt;
+    d.hv += (-d.h * 240 - d.hv * 15) * dt; d.h += d.hv * dt; d.jolt = (d.jolt || 0) * Math.exp(-4 * dt);
     if (s.phase === 'intro') {
       d.wT = 0.25 * s.spinDir;
       if (s.phaseT >= 0.6 && s.phaseT - dt < 0.6) { callout(s, ['1절', '2절', '피날레'][s.round - 1], 'spot'); sfx('spot'); }

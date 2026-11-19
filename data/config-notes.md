@@ -98,3 +98,7 @@ holds no comments. The values themselves are in `data/config.json`.
 - combo_r1/r2/r3: hits in a combo pang (연속 팡팡), one every two beats, per round
 - crit_chance_r1/r2/r3: share of ordinary pangs that are critical, per round
 - crit_mult: x power of a critical pang
+- disc_bounce: m/s the disc jumps on a pang (was 5.2)
+- disc_wobble: degrees the disc rattles on a pang
+- rumble_ms: gamepad and phone vibration per pang
+- turbo_mult / turbo_hold / turbo_chance_r1..r3: spin bursts (x cruising spin, seconds, share of DJ moves)
