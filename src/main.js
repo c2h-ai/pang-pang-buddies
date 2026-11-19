@@ -2,6 +2,7 @@
 // module so they share one scope as the page's scripts did. The grow step splits it by what the
 // code does and moves it to TypeScript.
 import './config.js';
+import pkg from '../package.json'; // the version shown on the home screen
 import * as THREE_CORE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -421,7 +422,7 @@ function makeOctopus() {
     rig.mouth.scale.setScalar(0.05 + rig.mouthOpen * 0.05);
     // which arm reaches for the friend (or the rim, when hanging)
     let reachIdx = -1;
-    if (a.hasT) { localTarget(rig, a, _v); const ta = Math.atan2(_v.x, _v.z); let best = 9; rig.arms.forEach((ch, i) => { let d = Math.abs(Math.atan2(Math.sin(ch.ang - ta), Math.cos(ch.ang - ta))); if (d < best) { best = d; reachIdx = i; } }); rig.reachIdx = reachIdx; }
+    if (a.hasT && (a.hold || a.mode === 'hang')) { localTarget(rig, a, _v); const ta = Math.atan2(_v.x, _v.z); let best = 9; rig.arms.forEach((ch, i) => { let d = Math.abs(Math.atan2(Math.sin(ch.ang - ta), Math.cos(ch.ang - ta))); if (d < best) { best = d; reachIdx = i; } }); rig.reachIdx = reachIdx; }
     const second = a.hasT && a.mode === 'hang' ? (rig.reachIdx + 1) % 8 : -1;
     rig.arms.forEach((ch, i) => {
       const sx = Math.sin(ch.ang), cz = Math.cos(ch.ang);
@@ -1954,7 +1955,7 @@ const Sim = (() => {
         }
         if (best && a.gauge >= tune.tail_cost) {
           a.gauge -= tune.tail_cost; a.lastUse = s.t; best.wasHang = best.mode === 'hang' ? 1 : 0; best.savedBy = a.kind;
-          best.ysx = best.x; best.ysz = best.z; best.ysy = best.mode === 'hang' ? -0.6 : best.y; best.yT = 0; best.yBy = a.kind; best.mode = 'yanked'; best.hold = 0;
+          best.ysx = best.x; best.ysz = best.z; best.ysy = best.mode === 'hang' ? -0.6 : best.y; best.yT = 0; best.yBy = a.kind; best.mode = 'yanked'; best.hold = 0; best.hasT = 0;
           if (best.carrying >= 0) drop(s, best);
           a.tailT = 0.5; a.tailTo = best.kind; a.hasT = 1; sfx('whip');
         } else if (a.gauge > 0.12) {
@@ -2243,6 +2244,7 @@ const Hud = (() => {
     L.call = $('div', '', hud, '', 'callout');
     // -- title and lobby --
     const title = L.title = $('div', 'layer', ui, '', 'title');
+    $('div', '', title, 'v' + pkg.version, 'ver');
     $('div', 'logo', title, lettering('팡팡 버디즈', ['#ff4fa8', '#ff4fa8', '#fff', '#ffc94d', '#ffc94d', '#ffc94d']) + '<div class="sub">PANG PANG BUDDIES</div><div class="tagline glass">DJ 여우가 돌리고 튕기는 디스코 팡팡, 넷이서 끝까지 버텨라!</div>');
     const seats = $('div', '', title, '', 'seats');
     for (let k = 0; k < 4; k++) {
