@@ -1441,7 +1441,7 @@ const World = (() => {
     telRing.material.opacity = ease(telRing.material.opacity, dj.ring >= 0 ? 0.5 + 0.4 * dj.ring : 0, 25, dt);
     if (dj.ring >= 0) telRing.scale.setScalar(Math.max(0.2, DISC.R * (1 - dj.ring * 0.93)));
     tiltArrow.material.opacity = ease(tiltArrow.material.opacity, dj.tiltWarn > 0 ? 0.35 + 0.3 * Math.sin(t * 12) : 0, 12, dt);
-    tiltArrow.rotation.z = -dj.tiltArrow + Math.PI / 2 - Math.PI; tiltArrow.position.set(Math.cos(dj.tiltArrow) * (1.2 + (t * 3 % 1.5)), 0.035, Math.sin(dj.tiltArrow) * (1.2 + (t * 3 % 1.5)));
+    tiltArrow.rotation.z = -dj.tiltArrow + Math.PI / 2; tiltArrow.position.set(-Math.cos(dj.tiltArrow) * (1.2 + (t * 3 % 1.5)), 0.035, -Math.sin(dj.tiltArrow) * (1.2 + (t * 3 % 1.5))); // points uphill: the way to brace
     const sp = dj.spot >= 0 ? s.animals[dj.spot] : null;
     spotDisc.material.opacity = ease(spotDisc.material.opacity, sp ? 0.4 : 0, 12, dt); spotCone.material.opacity = ease(spotCone.material.opacity, sp ? 0.3 : 0, 12, dt);
     if (sp) { spotDisc.position.set(sp.x, 0.03, sp.z); spotDisc.scale.setScalar(1.5); spotCone.position.set(sp.x, ctx.surfY(sp.x, sp.z) + 7, sp.z); }
@@ -1579,6 +1579,7 @@ const Snd = (() => {
       case 'horn': for (const [dt, len] of [[0, 0.11], [0.15, 0.11], [0.3, 0.5]]) for (const f of [466, 587, 698]) tone('sawtooth', f, len > 0.3 ? f * 0.93 : f, t + dt, len, 0.1, sfxG, { filter: 'lowpass', cut: 2600, slide: 1 }); break;
       case 'win': [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, k) => tone('triangle', f, f, t + k * 0.09, 0.3, 0.28)); [523.25, 659.25, 783.99].forEach(f => tone('sawtooth', f, f, t + 0.5, 0.9, 0.09, sfxG, { filter: 'lowpass', cut: 2400 })); noise(t + 0.1, 1.6, 0.22, 'bandpass', 1800, 2600, 0.5, sfxG, 0.4); break;
       case 'lose': [[233, 0], [220, 0.3], [208, 0.6], [196, 0.9]].forEach(([f, d], k) => tone('sawtooth', f, k === 3 ? f * 0.8 : f * 0.97, t + d, k === 3 ? 0.9 : 0.26, 0.22, sfxG, { filter: 'lowpass', cut: 1100, q: 3, vib: k === 3 ? 6 : 0, vibAmt: 8 })); break;
+      case 'thud': tone('sine', 120, 55, t, 0.12, 0.6); noise(t, 0.05, 0.25, 'lowpass', 900); break;
       case 'coin': tone('triangle', 988, 988, t, 0.07, 0.28); tone('triangle', 1319, 1319, t + 0.07, 0.18, 0.28); break;
       case 'join': tone('triangle', 520, 780, t, 0.1, 0.3); break;
       case 'ready': tone('triangle', 660, 660, t, 0.08, 0.3); tone('triangle', 990, 990, t + 0.08, 0.14, 0.3); break;
@@ -1621,7 +1622,7 @@ const Sim = (() => {
     const s = { t: 0, phase: 'intro', phaseT: 0, rt: 0, round: 1, rounds: 3, timeLeft: tune.round_seconds, stars: [0, 0, 0], score: 0, gained: '', goalReached: false,
       done: false, failed: false, pangT: -9, spinDir: 1, tele: null, pid: 0, rescues: 0, firstHang: 0, teachT: -1, gatherBy: -1, gatherT: 0, hintT: 0, pickups: [], starT: 0, nextPid: 0,
       animals: seats.map((se, k) => newAnimal(k, se.dev, se.pl)),
-      disc: { a: 0, w: 0, wT: 0, tilt: 0, tiltT: 0, tiltDir: 0, h: 0, hv: 0, scratch: 0, gates: [0, 0, 0, 0, 0, 0, 0, 0], warn: [0, 0, 0, 0, 0, 0, 0, 0] },
+      disc: { a: 0, w: 0, wT: 0, tilt: 0, tiltT: 0, tiltDir: 0, h: 0, hv: 0, scratch: 0, gateTiltT: 0, gateSeg: 0, wobT: 0, wobK: 0, wobA: 0, rattleT: 0, rattleNext: 0, gates: [0, 0, 0, 0, 0, 0, 0, 0], warn: [0, 0, 0, 0, 0, 0, 0, 0] },
       dj: { beat: 0, beatN: 0, bpm: tune.bpm_r1, mood: 'idle', moodT: 0, count: 0, pointX: 0, energy: 0.5, ring: -1, ringFake: 0, tiltWarn: 0, tiltArrow: 0, spot: -1, say: '', sayN: 0, sayT: 0 },
       cues: [], cueI: 0, callout: { text: '', kind: '', n: 0 }, hint: '', toasts: [], result: null };
     startRound(s, 1);
@@ -1662,6 +1663,15 @@ const Sim = (() => {
     const tilt = (t) => { const dir = Math.floor(rng() * 4) * Math.PI / 2 + (rng() - 0.5) * 0.5; push(t - 1.2, 'tiltWarn', { dir }); push(t, 'tiltOn', { dir }); push(t + tune.tilt_hold, 'tiltOff'); };
     const scratch = t => push(t, 'scratch');
     const combo = (t, power) => pang(t, power, { more: comboN - 1, combo: 1 }); // 연속 팡팡: comboN hits, one every two beats
+    const shakeP = [tune.shake_chance_r1, tune.shake_chance_r2, tune.shake_chance_r3][n - 1], wobP = [0, tune.wobble_share_r2, tune.wobble_share_r3][n - 1];
+    const rattle = t => { // 두두두: quick small bounces, then often one big pang to finish
+      const dur = tune.rattle_min + rng() * (tune.rattle_max - tune.rattle_min);
+      push(t - 0.8, 'say', { text: '두두두~ 간다!' }); push(t, 'rattle', { dur });
+      if (rng() < tune.rattle_finish) pang(snap(t + dur + b * (1 + Math.floor(rng() * 2))), 1, { count: 1 });
+      return dur + 3 * b;
+    };
+    const gate = (t, seg) => { push(t - tune.gate_warn, 'gateWarn', { seg }); push(t, 'gateOpen', { seg }); if (rng() < tune.gate_rattle) push(t + 1 + rng(), 'rattle', { dur: tune.rattle_min + rng() * (tune.rattle_max - tune.rattle_min) }); };
+    const wobble = t => { push(t - 0.8, 'say', { text: '출렁~ 출렁~' }); push(t, 'wobble', { dur: tune.wobble_secs }); return tune.wobble_secs; };
     const turbo = t => { push(t - 1, 'say', { text: '터보 회전~! 꽉 잡아!' }); push(t, 'turbo', { w: top * tune.turbo_mult }); push(t + tune.turbo_hold, 'spin', { w: top }); };
     const turboP = [tune.turbo_chance_r1, tune.turbo_chance_r2, tune.turbo_chance_r3][n - 1];
     const spot = (t, power) => { push(t - tune.spot_warn, 'spot'); pang(t, power, { spot: 1 }); };
@@ -1672,7 +1682,7 @@ const Sim = (() => {
       push(p1 + 3, 'spin', { w: top }); push(p1 + 3, 'say', { text: '속도 올립니다~' });
       pang(p2, 1, { teach: 1 });
       let t = p2 + gap, k = 0;
-      while (t < T - 9.5) { if (k === 2) combo(snap(t), 0.95); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); if (rng() < turboP) turbo(snap(t + gap * 0.5)); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
+      while (t < T - 9.5) { if (k !== 2 && k > 0 && rng() < shakeP) { t += rattle(snap(t)) + gap * 0.6; k++; continue; } if (k === 2) combo(snap(t), 0.95); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); if (rng() < turboP) turbo(snap(t + gap * 0.5)); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
       push(T - 9, 'spin', { w: top * 1.25 }); push(T - 9, 'say', { text: '막판 스퍼트! 버틸 수 있을까~?' });
       pang(snap(T - 6.2), 1); pang(snap(T - 2.6), 1);
     } else if (n === 2) {
@@ -1680,9 +1690,11 @@ const Sim = (() => {
       push(8.2, 'say', { text: '기울입니다~ 미끄러져요!' }); tilt(snap(9.6));
       pang(snap(14.6), 1, { fake: 1 });
       push(19.6, 'say', { text: '스크래치! 반대로~' }); scratch(snap(20.4));
+      gate(snap(32), Math.floor(rng() * 8)); // the finale's gates, once, as a taste
       let t = 24.5, k = 0;
       while (t < T - 10) {
         const r = rng(), st = snap(t);
+        if (rng() < shakeP) { t += (rng() < wobP ? wobble(st) : rattle(st)) + gap * 0.6; continue; }
         if (r < 0.34) pang(st, 0.9 + rng() * 0.12, { fake: rng() < fakeP ? 1 : 0, count: rng() < 0.3 ? 3 : 2 });
         else if (r < 0.52) tilt(st);
         else if (r < 0.74) { tilt(st); pang(snap(st + 1.6), 0.9); t += 1.2; }
@@ -1696,12 +1708,13 @@ const Sim = (() => {
     } else {
       push(2, 'spin', { w: top });
       const order = [0, 3, 6, 1, 4, 7, 2, 5], start = Math.floor(rng() * 8), ng = Math.round(tune.gates_r3);
-      for (let k = 0; k < ng; k++) { const t = 3.2 + k * 12.5; push(t - tune.gate_warn, 'gateWarn', { seg: (order[k] + start) % 8 }); push(t, 'gateOpen', { seg: (order[k] + start) % 8 }); }
+      for (let k = 0; k < ng; k++) gate(3.2 + k * 12.5, (order[k] + start) % 8);
       pang(snap(7), 1); spot(snap(12.2), 1);
       scratch(snap(17)); pang(snap(19.4), 1);
       let t = 23.5;
       while (t < T - 10) {
         const r = rng(), st = snap(t);
+        if (rng() < shakeP) { t += (rng() < wobP ? wobble(st) : rattle(st)) + gap * 0.6; continue; }
         if (r < 0.3) pang(st, 0.95 + rng() * 0.1, { fake: rng() < fakeP ? 1 : 0, count: rng() < 0.35 ? 3 : 2 });
         else if (r < 0.5) spot(st, 1);
         else if (r < 0.7) { tilt(st); pang(snap(st + 1.6), 0.95); t += 1.2; }
@@ -1733,15 +1746,37 @@ const Sim = (() => {
     else if (c.type === 'impact') doPang(s, c.power, c.tgt === -2 ? dj.spot : -1, c.crit);
     else if (c.type === 'critWarn') { say(s, pick(['이번엔 세게 간다~!', '크리티컬 준비~!', '꽉 잡아~ 진짜 세다!'])); sfx('warn'); }
     else if (c.type === 'comboWarn') say(s, c.n + '연타 콤보 간다~!');
-    else if (c.type === 'tiltWarn') { dj.tiltWarn = 1; dj.tiltArrow = c.dir; callout(s, DIRNAME(c.dir) + '으로 기울어요!', 'warn'); sfx('warn'); }
+    else if (c.type === 'rattle' || c.type === 'wobble') {
+      if (c.type === 'rattle') { d.rattleT = c.dur; d.rattleNext = 0; callout(s, '두두두!', 'pang'); if (!s.rattleTaught) { s.rattleTaught = 1; s.hint = '두두두! 버티면 덜 밀려요 · 스킬이나 안쪽으로 누르기'; s.hintT = 4; } }
+      else { d.wobT = c.dur; callout(s, '출렁~ 돌아가요!', 'warn'); sfx('tilt'); if (!s.wobTaught) { s.wobTaught = 1; s.hint = '출렁출렁! 화살표 쪽으로 계속 버티세요'; s.hintT = 4.5; } }
+      const err = [tune.bot_error_r1, tune.bot_error_r2, tune.bot_error_r3][s.round - 1]; for (const a of s.animals) if (!a.dev) a.ai.tiltOk = rng() >= err ? 1 : 0;
+    }
+    else if (c.type === 'tiltWarn') { dj.tiltWarn = 1; dj.tiltArrow = c.dir; callout(s, '반대로 버텨요!', 'warn'); sfx('warn');
+      if (!s.tiltTaught) { s.tiltTaught = 1; s.hint = '기울면 높은 쪽으로 눌러 버티세요 · 에너지가 닳아요'; s.hintT = 4; }
+      const err = [tune.bot_error_r1, tune.bot_error_r2, tune.bot_error_r3][s.round - 1]; for (const a of s.animals) if (!a.dev) a.ai.tiltOk = rng() >= err ? 1 : 0; }
     else if (c.type === 'tiltOn') { d.tiltT = tune.tilt_angle * Math.PI / 180; d.tiltDir = c.dir; dj.tiltWarn = 2; dj.tiltArrow = c.dir; sfx('tilt'); }
     else if (c.type === 'tiltOff') { d.tiltT = 0; dj.tiltWarn = 0; }
     else if (c.type === 'gateWarn') { d.warn[c.seg] = 1; callout(s, '문 열립니다!', 'warn'); sfx('warn'); if (rng() < 0.5) say(s, '문 열립니다~ 그쪽은 그대로 밖이에요!'); }
-    else if (c.type === 'gateOpen') { d.warn[c.seg] = 0; d.gates[c.seg] = 1; const wa = (c.seg + 0.5) * SEG - d.a; fx('gate', Math.cos(wa) * R, 0, Math.sin(wa) * R); sfx('gate'); }
+    else if (c.type === 'gateOpen') { d.warn[c.seg] = 0; d.gates[c.seg] = 1; const wa = (c.seg + 0.5) * SEG - d.a; fx('gate', Math.cos(wa) * R, 0, Math.sin(wa) * R); sfx('gate');
+      d.gateTiltT = tune.gate_tilt_secs; d.gateSeg = c.seg; callout(s, '문 열림! 반대로 버텨요!', 'warn');
+      if (!s.gateTaught) { s.gateTaught = 1; s.hint = '열린 문 쪽으로 기울어요 · 문 반대쪽으로 버티세요'; s.hintT = 4.5; }
+      const err = [tune.bot_error_r1, tune.bot_error_r2, tune.bot_error_r3][s.round - 1]; for (const a of s.animals) if (!a.dev) a.ai.tiltOk = rng() >= err ? 1 : 0; }
     else if (c.type === 'scratch') { s.spinDir *= -1; d.wT = -d.wT; d.scratch = 0.9; mood(s, 'scratch'); callout(s, '스크래치!', 'warn'); sfx('scratch'); }
     else if (c.type === 'spot') {
       const on = s.animals.filter(a => a.mode === 'ground' || a.mode === 'air' || a.mode === 'fly');
       if (on.length) { const a = pick(on); dj.spot = a.kind; dj.pointX = clamp(a.x / 6, -1, 1); mood(s, 'point'); callout(s, KINDS[a.kind].name + ' 지목!', 'spot'); say(s, KINDS[a.kind].name + ' 손님~ 준비됐나요?'); sfx('spot'); }
+    }
+  }
+  function rattleHit(s) {
+    const d = s.disc; d.hv += tune.disc_bounce * tune.rattle_power; d.jolt = Math.min(1.6, (d.jolt || 0) + 0.4); s.pangT = s.t; rumble(0.35); sfx('thud');
+    for (const a of s.animals) {
+      if (a.mode !== 'ground' || a.shield > 0 || a.sheltered) continue;
+      const r = Math.hypot(a.x, a.z) || 1, tilted = d.tilt > 0.03;
+      const px = tilted ? Math.cos(d.tiltDir) : a.x / r, pz = tilted ? Math.sin(d.tiltDir) : a.z / r; // where it gets pushed: downhill, or outward
+      const il = Math.hypot(a.ix, a.iz), bracing = il > 0.3 && -(a.ix * px + a.iz * pz) >= 0.7071 * Math.min(1, il) && a.gauge > 0 && a.tired <= 0;
+      if (a.hold || bracing) { a.gauge -= tune.rattle_cost; a.lastUse = s.t; if (a.gauge <= 0) { a.gauge = 0; a.tired = tune.tired_time; letGo(s, a); sfx('tired'); } continue; }
+      a.mode = 'air'; a.y = 0.02; a.air = 0; a.vy = tune.pang_power * tune.rattle_power * kv(a.kind, 'launch');
+      a.vx += px * tune.rattle_push; a.vz += pz * tune.rattle_push;
     }
   }
   function doPang(s, power, tgt, crit) {
@@ -1814,8 +1849,14 @@ const Sim = (() => {
     const ai = a.ai, d = s.disc, rt = s.rt; let tx = a.x, tz = a.z, sk = 0, go = 1;
     const r = Math.hypot(a.x, a.z), wa = ai.home - d.a, hr = HOME_R[a.kind];
     tx = Math.cos(wa) * hr; tz = Math.sin(wa) * hr;                   // ride at its own spot on the record
-    if (d.tilt > 0.03) { tx -= Math.cos(d.tiltDir) * 1.6; tz -= Math.sin(d.tiltDir) * 1.6; }
-    if (r > RIN - 1.3 && openAt(s, a.x, a.z)) { tx = a.x * 0.4; tz = a.z * 0.4; }
+    let brace = 0;
+    if ((d.tilt > 0.03 || d.rattleT > 0) && a.mode === 'ground') {
+      const e = s.animals[0];
+      if (a.kind !== 0 && a.gauge < 0.3 && e.mode === 'ground') { tx = e.x; tz = e.z; }          // low on energy: shelter by the elephant
+      else if (ai.tiltOk) brace = 1;                                                               // brace uphill
+      else { tx = a.x; tz = a.z; }                                                                 // missed it: slides
+    }
+    if (r > RIN - 1.3 && openAt(s, a.x, a.z) && ai.tiltOk) { tx = a.x * 0.4; tz = a.z * 0.4; }
     if (!s.tele && s.phase === 'run' && a.mode === 'ground') { let bd = 4.5; for (const p of s.pickups) { const px = Math.cos(p.la - d.a) * p.r, pz = Math.sin(p.la - d.a) * p.r, dd = Math.hypot(px - a.x, pz - a.z); if (dd < bd && !openAt(s, px, pz)) { bd = dd; tx = px; tz = pz; } } }
     const usable = a.tired <= 0 && a.gauge > 0.14;
     // someone is hanging: the bot that noticed goes; a call for help brings every bot
@@ -1854,7 +1895,7 @@ const Sim = (() => {
     if (ai.plan && !s.tele && rt >= ai.from && rt <= ai.to && usable && ai.plan !== 3) sk = 1;
     // sliding out through an open gate, or thrown: last-ditch skill
     const outv = (a.vx * a.x + a.vz * a.z) / (r || 1) - 0;
-    if (a.mode === 'ground' && usable && r > 4.3 && openAt(s, a.x, a.z) && outv > 1.6) { sk = 1; tx = 0; tz = 0; }
+    if (a.mode === 'ground' && usable && r > 4.3 && openAt(s, a.x, a.z) && outv > 1.6 && ai.tiltOk) { sk = 1; tx = 0; tz = 0; }
     if (a.mode === 'air' && usable && (a.kind === 1 || a.kind === 3) && ai.panic) { if (r > 3.6 && a.vy < 3) sk = 1; tx = 0; tz = 0; }
     if (a.kind === 1 && a.mode === 'fly' && !ai.fly && r > 2.6 && a.gauge > 0.06) { sk = 1; tx = 0; tz = 0; }
     if (a.mode === 'hang' && (a.kind === 1 || a.kind === 3) && a.gauge >= tune.self_rescue_cost && a.tired <= 0 && s.rt >= ai.selfAt) sk = a.sk ? 0 : 1;
@@ -1862,6 +1903,7 @@ const Sim = (() => {
     if (a.mode === 'out') sk = 0;
     const dx = tx - a.x, dz = tz - a.z, dd = Math.hypot(dx, dz);
     if (dd > 0.3) { a.ix = dx / dd * go; a.iz = dz / dd * go; } else { a.ix = 0; a.iz = 0; }
+    if (brace && !sk) { if (d.tilt > 0.03) { a.ix = -Math.cos(d.tiltDir); a.iz = -Math.sin(d.tiltDir); } else if (d.rattleT > 0) { a.ix = -a.x / (r || 1); a.iz = -a.z / (r || 1); } }
     if (ai.plan === 3 && a.mode === 'air') { a.ix = 0; a.iz = 0; }
     a.sk = sk; a.sig = 0;
   }
@@ -2005,7 +2047,20 @@ const Sim = (() => {
           let rx = a.vx - sx, rz = a.vz - sz;
           let ax = (ix * walk - rx) * tune.grip_stiffness, az = (iz * walk - rz) * tune.grip_stiffness; const al = Math.hypot(ax, az);
           if (al > trac) { ax *= trac / al; az *= trac / al; }
-          const slope = tune.gravity * Math.sin(d.tilt) * tune.tilt_slide * (sh ? 0.2 : 1), push = d.w * d.w * tune.spin_push * (sh ? 0.2 : 1);
+          // on a tilt: pressing within 45 degrees of uphill braces (no slide, energy drains); anything else slides hard
+          let slope = tune.gravity * Math.sin(d.tilt) * tune.tilt_slide * (sh ? 0.2 : 1), braced = 0;
+          if (d.tilt > 0.03 && !sh) {
+            const upx = -Math.cos(d.tiltDir), upz = -Math.sin(d.tiltDir);
+            if (il > 0.3 && (ix * upx + iz * upz) >= 0.7071 * Math.min(1, il) && a.gauge > 0 && a.tired <= 0) {
+              braced = 1; slope = 0; // stops the slide, then creeps uphill slowly
+              ax = (ix * walk * tune.brace_walk - rx) * tune.grip_stiffness; az = (iz * walk * tune.brace_walk - rz) * tune.grip_stiffness;
+              const bl = Math.hypot(ax, az); if (bl > trac) { ax *= trac / bl; az *= trac / bl; }
+              a.gauge -= dt / gaugeSecs(k) * tune.brace_cost; a.lastUse = s.t;
+              if (a.gauge <= 0) { a.gauge = 0; a.tired = tune.tired_time; sfx('tired'); }
+            } else slope *= tune.slide_mult;
+          }
+          a.brace = braced;
+          const push = d.w * d.w * tune.spin_push * (sh ? 0.2 : 1);
           rx += (ax + Math.cos(d.tiltDir) * slope + a.x * push) * dt; rz += (az + Math.sin(d.tiltDir) * slope + a.z * push) * dt;
           a.vx = sx + rx; a.vz = sz + rz;
         }
@@ -2106,8 +2161,16 @@ const Sim = (() => {
     if (s.gatherT > 0) s.gatherT -= dt;
     // the disc
     const acc = (d.scratch > 0 ? tune.scratch_accel : tune.spin_accel) * dt; if (d.scratch > 0) d.scratch -= dt;
-    d.w += clamp(d.wT - d.w, -acc, acc); d.a = (d.a + d.w * dt) % TAU;
+    const shaking = d.wobT > 0 || d.rattleT > 0;
+    d.w += clamp(d.wT * (shaking ? tune.shake_spin : 1) - d.w, -acc, acc); d.a = (d.a + d.w * dt) % TAU;
     d.tilt += clamp(d.tiltT - d.tilt, -0.55 * dt, 0.55 * dt);
+    // 출렁이: a tilt whose low side travels round the disc
+    if (d.wobT > 0) d.wobT -= dt;
+    d.wobK += ((d.wobT > 0 && s.phase === 'run' ? 1 : 0) - d.wobK) * Math.min(1, dt * 3); d.wobA = (d.wobA + dt * TAU / tune.wobble_period) % TAU;
+    if (d.gateTiltT > 0) { d.gateTiltT -= dt; if (d.tiltT === 0) { const ga = (d.gateSeg + 0.5) * SEG - d.a; d.tilt = Math.max(d.tilt, tune.gate_tilt_angle * Math.PI / 180); d.tiltDir = ga; s.dj.tiltWarn = 2; s.dj.tiltArrow = ga; } if (d.gateTiltT <= 0 && d.wobT <= 0 && d.tiltT === 0) s.dj.tiltWarn = 0; }
+    if (d.wobK > 0.01 && d.tiltT === 0 && d.gateTiltT <= 0) { d.tilt = Math.max(d.tilt, d.wobK * tune.wobble_angle * Math.PI / 180); d.tiltDir = d.wobA; s.dj.tiltWarn = d.wobK > 0.3 ? 2 : 0; s.dj.tiltArrow = d.wobA; }
+    // 두두두: small bounces in quick succession
+    if (d.rattleT > 0 && s.phase === 'run') { d.rattleT -= dt; d.rattleNext -= dt; if (d.rattleNext <= 0) { d.rattleNext = tune.rattle_gap; rattleHit(s); } }
     d.hv += (-d.h * 240 - d.hv * 15) * dt; d.h += d.hv * dt; d.jolt = (d.jolt || 0) * Math.exp(-4 * dt);
     if (s.phase === 'intro') {
       d.wT = 0.25 * s.spinDir;
@@ -2322,7 +2385,9 @@ const Hud = (() => {
       }
       if (s.callout.n !== lastCall) {
         lastCall = s.callout.n; const kind = s.callout.kind === 'go' ? 'start' : s.callout.kind;
-        if (s.callout.text === '팡!') L.call.innerHTML = lettering('팡!', ['#ff4fa8', '#ffc94d']); else L.call.textContent = s.callout.text;
+        if (s.callout.text === '팡!') L.call.innerHTML = lettering('팡!', ['#ff4fa8', '#ffc94d']);
+        else if (s.callout.text === '반대로 버텨요!') L.call.innerHTML = '<svg viewBox="0 0 40 50" style="display:inline-block;height:0.85em;vertical-align:-0.05em;margin-right:0.25em"><path d="M20 2 L38 24 H27 V48 H13 V24 H2 Z" fill="#35f2e0" stroke="#0a0e2a" stroke-width="4" stroke-linejoin="round"/></svg>반대로 버텨요!';
+        else L.call.textContent = s.callout.text;
         L.call.className = kind; callT0 = v.t;
       }
       const age = (v.t - callT0) / 0.95;

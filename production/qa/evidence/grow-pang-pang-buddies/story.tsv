@@ -1,5 +1,5 @@
 browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
-time	2026-11-19 18:58:59
+time	2026-11-19 19:12:48
 render	cheap
 webgl	ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)
 ua	HeadlessChrome/157.0.0.0
@@ -7,7 +7,6 @@ scene	0	title
 state	0	title	{"t":0,"phase":"demo","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"pi
 scene	70	play
 state	70	play	{"t":0,"phase":"intro","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"p
-playinput	332	KeyD
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
@@ -16,146 +15,151 @@ console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
-frame	3481	8adc6a2c
-frame	3482	98621d36
-frame	3483	6bfb3cfa
-frame	3484	e19a4e34
-frame	3485	360a4f06
-frame	3486	49d27199
-frame	3487	9a44815e
-frame	3488	fec875bc
-frame	3489	7f03a492
 console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
-frame	3490	62b3c7b7
-frame	3491	d41609c8
-frame	3492	a923565b
-frame	3493	62f40941
-frame	3494	27b2f
-frame	3495	81cfcad5
-frame	3496	5d4dd1f2
-frame	3497	3f174e22
-frame	3498	ce89a7a1
-frame	3499	b7e9c9f3
-frame	3500	d92c1048
-frame	3501	9c435670
-frame	3502	fe8b6e6f
-frame	3503	3faba63d
-frame	3504	8306782b
-frame	3505	a425f3df
-frame	3506	48b4d026
-frame	3507	255288d7
-frame	3508	38c65659
-frame	3509	f8728601
-frame	3510	9f641856
-frame	3511	c36c0b5b
-frame	3512	9eb4c17a
-frame	3513	42f59f23
-frame	3514	b5faa39
-frame	3515	4c2f8f4
-frame	3516	e8920697
-frame	3517	a09836b0
-frame	3518	7b42b046
-frame	3519	b06831e1
-frame	3520	b623ede0
-frame	3521	c72c4f1
-frame	3522	f104b46e
-frame	3523	c57e1a5f
-frame	3524	b93e30e7
-frame	3525	7c30ccf9
-frame	3526	e27376ae
-frame	3527	988a78b0
-frame	3528	1fef7eec
-frame	3529	44074e2e
-frame	3530	cdbfdfbe
-frame	3531	a48ac000
-frame	3532	b99e3dba
-frame	3533	55f92ac8
-frame	3534	687f039a
-frame	3535	6f34ddc1
-frame	3536	4ec75f31
-frame	3537	e27d08a4
-frame	3538	8ebfe088
-frame	3539	ec79f4fb
-frame	3540	297653b5
-frame	3541	5484b46
-frame	3542	1edcc673
-frame	3543	f2aad774
-frame	3544	49b30dda
-frame	3545	a259d369
-frame	3546	8a0aa257
-frame	3547	6267495c
-frame	3548	32f1ad4a
-frame	3549	fc0f7011
-frame	3550	fa0dd933
-frame	3551	6077858
-frame	3552	6a978e4e
-frame	3553	e636219b
-frame	3554	7b2af7c7
-frame	3555	210a1104
-frame	3556	2e2acaa0
-frame	3557	57139624
-frame	3558	3cf164bb
-frame	3559	467d1a06
-frame	3560	c98e96e1
-frame	3561	c5eb548b
-frame	3562	bceb2b0d
-frame	3563	f861f79d
-frame	3564	7ff7f90d
-frame	3565	a1a8f15b
-frame	3566	c8b6d7e
-frame	3567	142cf270
-frame	3568	3445cebd
-frame	3569	d3b4aa4e
-frame	3570	1cdc4ce9
-frame	3571	97ad2fa2
-frame	3572	4a0d3a8b
-frame	3573	55661104
-frame	3574	9c2c0be7
-frame	3575	b0ed80d2
-frame	3576	f3f736f7
-frame	3577	f081fdfb
-frame	3578	84e1de5a
-frame	3579	b4bcc98f
-frame	3580	58148c5c
-frame	3581	3db5711c
-frame	3582	3d4c6795
-frame	3583	23dd0039
-frame	3584	25b9d9f1
-frame	3585	23fc27a6
-frame	3586	9eb76395
-frame	3587	4ad54ab9
-frame	3588	7bbb89eb
-frame	3589	cb8973be
-frame	3590	740577ce
-frame	3591	49242fbd
-frame	3592	f15c0b8d
-frame	3593	df83c5ed
-frame	3594	2ceac423
-frame	3595	8be5bbe
-frame	3596	84a7e4e3
-frame	3597	d106127b
-frame	3598	b046d6e7
-frame	3599	81e38582
-frame	3600	21d13c8c
-state	3600	play	{"t":58.83,"phase":"run","phaseT":55.42,"rt":55.42,"round":1,"rounds":3,"timeLeft":4.58,"stars":[0,0,0],"score":32,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":57,"spinDir":-1,"
+console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
+console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
+console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
+console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
+frame	3481	5721ef11
+frame	3482	97c0ec08
+frame	3483	b5d3ef8b
+frame	3484	10a37182
+frame	3485	f9122fd6
+frame	3486	4d48db95
+frame	3487	6d69a8fc
+frame	3488	24e4d155
+frame	3489	93bc5b7e
+console	5169	Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.
+frame	3490	1658fc5f
+frame	3491	79e1e757
+frame	3492	f50d787f
+frame	3493	7247b9c6
+frame	3494	c9cd8574
+frame	3495	ccb40b7
+frame	3496	f6dd4830
+frame	3497	4b9830e9
+frame	3498	ff76af83
+frame	3499	f7bdffe
+frame	3500	de0c4712
+frame	3501	961c1e3e
+frame	3502	814da048
+frame	3503	c374d0fd
+frame	3504	dc844ec7
+frame	3505	1dc9d90c
+frame	3506	fb4fe00d
+frame	3507	51592efb
+frame	3508	c6642f0e
+frame	3509	fc9e368b
+frame	3510	dce73382
+frame	3511	72f95e56
+frame	3512	2b4a0c03
+frame	3513	96c03c50
+frame	3514	c62e32bb
+frame	3515	6a89afe2
+frame	3516	2a718b86
+frame	3517	524d07f6
+frame	3518	4bcd9991
+frame	3519	2d0648db
+frame	3520	2aa40c14
+frame	3521	417dd22f
+frame	3522	5280ce4d
+frame	3523	32f7d50c
+frame	3524	89f7d08a
+frame	3525	d24dccec
+frame	3526	97e9ef8c
+frame	3527	877f9f31
+frame	3528	e0071041
+frame	3529	1c31ab0b
+frame	3530	9c278b8a
+frame	3531	66e04376
+frame	3532	8df30e08
+frame	3533	ad8a0333
+frame	3534	860690bd
+frame	3535	e7285b2c
+frame	3536	ae0c9fd5
+frame	3537	7cf2c42d
+frame	3538	fd200e19
+frame	3539	621529f6
+frame	3540	5921de45
+frame	3541	82f8d9ba
+frame	3542	720375ec
+frame	3543	ff8da3c
+frame	3544	89b2689e
+frame	3545	dd96e2b3
+frame	3546	232577a4
+frame	3547	dd4c5446
+frame	3548	7c1d510
+frame	3549	4a0473b9
+frame	3550	f4fc39c1
+frame	3551	215d6266
+frame	3552	581dc382
+frame	3553	69be0402
+frame	3554	322f7da
+frame	3555	c84663f6
+frame	3556	4666d559
+frame	3557	14363f01
+frame	3558	683dc781
+frame	3559	ab4d0ece
+frame	3560	7e439676
+frame	3561	20027793
+frame	3562	3728b41f
+frame	3563	ae0c3809
+frame	3564	fb612f36
+frame	3565	2276e43e
+frame	3566	e52810fa
+frame	3567	f1c730d2
+frame	3568	736a966f
+frame	3569	fd713915
+frame	3570	f632bb13
+frame	3571	19037d44
+frame	3572	17cb7387
+frame	3573	8c2ac139
+frame	3574	df09ed30
+frame	3575	a0d93e5b
+frame	3576	22ebcf80
+frame	3577	9c5d9162
+frame	3578	a4fae282
+frame	3579	8871b2cd
+frame	3580	c9a41e32
+frame	3581	d9c93a0b
+frame	3582	cabd7d02
+frame	3583	2f31c64a
+frame	3584	9e2b7ff1
+frame	3585	28b5841b
+frame	3586	69333188
+frame	3587	e01d4722
+frame	3588	3a101c82
+frame	3589	384c2c8b
+frame	3590	61c3aa06
+frame	3591	d84b560a
+frame	3592	51b86e61
+frame	3593	7cbacff0
+frame	3594	6b913a2a
+frame	3595	af436e98
+frame	3596	1f794ac7
+frame	3597	780a8784
+frame	3598	d74dfc2a
+frame	3599	7c41232b
+frame	3600	db059c70
+state	3600	play	{"t":58.83,"phase":"run","phaseT":55.42,"rt":55.42,"round":1,"rounds":3,"timeLeft":4.58,"stars":[0,0,0],"score":31,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":57,"spinDir":-1,"
 digits	log	900 34px "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif	proportional	9.996
 loop	log	none	no loop() step was marked
 first	log	none	no state.beat
 pressure	none	the game set no number state.margin in play
-steptime	3600	0.023	1.900
-frametime	59	91.6	192.0	900	59	59
-done	3600	play	stop	60.0	22998
-console	0	[.WebGL-0x13400533600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-console	0	[.WebGL-0x13400533600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-console	0	[.WebGL-0x13400533600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
-console	0	[.WebGL-0x13400533600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+steptime	3600	0.029	2.000
+frametime	59	96.0	205.6	900	59	59
+done	3600	play	stop	60.0	24999
+console	0	[.WebGL-0x13400503600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x13400503600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x13400503600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x13400503600]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
 measured	1280x720
 text	play	html	496,29,549,45	16.3	14.19	inside	ROUND 1
 text	play	html	556,29,627,45	16.6	18.17	inside	몸풀기 디스코
 text	play	html	770,27,826,59	32.6	5.65	inside	0:05
 text	play	html	31,24,113,39	15.1	14.19	inside	ROUND 1 / 3
 text	play	html	47,47,78,62	15.8	18.17	inside	팀 별
-text	play	html	78,44,94,63	18.6	13.04	inside	32
+text	play	html	78,44,92,63	18.6	13.04	inside	31
 text	play	html	1126,26,1133,41	14.6	17.23	inside	P
 text	play	html	1140,26,1190,41	15.8	15.29	inside	일시정지
 text	play	html	1197,26,1206,41	14.6	17.23	inside	M
@@ -164,22 +168,23 @@ text	play	html	117,648,129,663	14.8	9.97	inside	P1
 text	play	html	83,666,120,681	15.0	18.17	inside	코 잡기
 text	play	html	127,666,158,681	15.0	17.23	inside	Space
 text	play	html	186,631,206,646	15.0	6.76	inside	탈락
-text	play	html	206,646,213,662	16.3	13.04	inside	2
+text	play	html	206,646,213,662	16.3	13.04	inside	3
 text	play	html	298,648,322,665	17.4	18.17	inside	삐삐
 text	play	html	332,648,355,663	14.8	8.23	inside	BOT
 text	play	html	298,666,318,681	15.0	18.17	inside	날기
-text	play	html	418,646,427,662	16.3	13.04	inside	11
+text	play	html	415,646,427,662	16.3	13.04	inside	12
 text	play	html	910,648,934,665	17.4	18.17	inside	무너
 text	play	html	944,648,967,663	14.8	8.23	inside	BOT
 text	play	html	910,666,954,681	15.0	18.17	inside	빨판 걷기
-text	play	html	1012,631,1033,646	15.0	6.76	inside	탈락
+text	play	html	982,631,1033,646	15.0	3.53	inside	매달림 5.0
 text	play	html	1032,646,1039,662	16.3	13.04	inside	7
 text	play	html	1124,648,1148,665	17.4	18.17	inside	몽이
 text	play	html	1158,648,1181,663	14.8	8.23	inside	BOT
 text	play	html	1124,666,1168,681	15.0	18.17	inside	꼬리 낚기
-text	play	html	1242,646,1253,662	16.3	13.04	inside	12
+text	play	html	1246,646,1253,662	16.3	13.04	inside	9
+text	play	html	284,311,328,330	19.4	1.05	inside	구해줘!
 text	play	html	728,104,769,119	15.1	5.90	inside	DJ 여우
-text	play	html	728,119,836,136	17.7	17.23	inside	꽉 잡아~ 진짜 세다!
-screen	3600	play	17554af8	drawn
+text	play	html	728,119,845,136	17.7	17.23	inside	무너 손님 매달렸다~!
+screen	3600	play	cceac642	drawn
 uncaught	0
-shot	/Users/jinseungim/development/dev-game/new-game9/production/qa/evidence/grow-pang-pang-buddies/story.png	896678
+shot	/Users/jinseungim/development/dev-game/new-game9/production/qa/evidence/grow-pang-pang-buddies/story.png	902963

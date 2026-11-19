@@ -102,3 +102,10 @@ holds no comments. The values themselves are in `data/config.json`.
 - disc_wobble: degrees the disc rattles on a pang
 - rumble_ms: gamepad and phone vibration per pang
 - turbo_mult / turbo_hold / turbo_chance_r1..r3: spin bursts (x cruising spin, seconds, share of DJ moves)
+- brace_cost: on a tilt, bracing uphill drains the gauge at this share of the animal's skill rate
+- brace_walk: x walk control while bracing
+- slide_mult: x slide for an animal that does not brace
+- wobble_*: 출렁이, a tilt (degrees) whose low side goes round in wobble_period s, lasting wobble_secs; wobble_share_r2/r3 = share of shake moves that are wobbles
+- rattle_*: 두두두, bounces at rattle_power x pang every rattle_gap s for rattle_min..max s; each pushes an unbraced animal rattle_push m/s and costs a braced one rattle_cost gauge; rattle_finish = chance a big pang follows
+- shake_spin: x spin while shaking; shake_chance_r1..r3: share of DJ moves that are shakes
+- gate_tilt_angle / gate_tilt_secs: an opening gate tips the disc toward itself (degrees, seconds); gate_rattle: chance a 두두두 follows 1-2 s later
