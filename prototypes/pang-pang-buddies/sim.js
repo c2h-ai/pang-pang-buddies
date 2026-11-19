@@ -49,7 +49,7 @@ const Sim = (() => {
     const d = s.disc; d.w *= 0.3; d.wT = 0; d.tilt = d.tiltT = 0; d.scratch = 0; d.gates.fill(0); d.warn.fill(0);
     s.dj.bpm = [tune.bpm_r1, tune.bpm_r2, tune.bpm_r3][n - 1]; s.dj.energy = 0.45 + n * 0.15; s.dj.ring = -1; s.dj.tiltWarn = 0; s.dj.spot = -1; s.dj.mood = 'idle';
     s.spinDir = rng() < 0.5 ? 1 : -1;
-    for (const a of s.animals) place(s, a);
+    for (const a of s.animals) { if (a.gone) { a.mode = 'out'; a.hasT = 0; a.hold = 0; a.outA = SPAWN_A[a.kind] * TAU / 2.6; } else place(s, a); } // out in an earlier song: out for good
     s.cues = buildCues(s, n); s.cueI = 0;
     say(s, ['자, 출발합니다~ 꽉 잡아요!', '2절 갑니다! 이번엔 기울여 볼까~', '피날레! 문 열립니다~ 조심!'][n - 1]);
     s.hint = '';
@@ -459,7 +459,7 @@ const Sim = (() => {
       a.vy -= tune.gravity * dt; a.y += a.vy * dt; const nr = Math.hypot(a.x, a.z) || 1, go = Math.min(1, dt * 3);
       a.x += (a.x / nr * DISC.POOL_R - a.x) * go; a.z += (a.z / nr * DISC.POOL_R - a.z) * go;
       if (a.y <= DISC.POOL_Y - 0.1) { a.mode = 'out'; a.y = DISC.POOL_Y; a.outA = Math.atan2(a.z, a.x); a.gauge = 0; fx('splash', a.x, 0, a.z); sfx('splash'); say(s, pick([KINDS[k].name + ' 손님 퇴장~ 풍덩!', '한 명 보냈다~!', '풍덩~! 시원하겠다~'])); mood(s, 'laugh');
-        if (a.dev) { s.hint = '풍덩! 다음 곡에 돌아와요 · ' + Input.label(a.dev, 'skill') + ' 키로 응원하기'; s.hintT = 6; } }
+        if (a.dev) { s.hint = '풍덩! 남은 곡은 튜브에서 응원해요 · ' + Input.label(a.dev, 'skill') + ' 키로 응원하기'; s.hintT = 6; } }
     } else if (a.mode === 'out') {
       a.outA += dt * 0.06; a.x = Math.cos(a.outA) * DISC.POOL_R; a.z = Math.sin(a.outA) * DISC.POOL_R; a.y = DISC.POOL_Y - 0.1; a.face = Math.atan2(-a.x, -a.z); a.gauge = 0;
       if (a.skHit) { a.emote = 'cheer'; a.emoteT = 0.8; sfx('cheer', k); }
@@ -526,10 +526,10 @@ const Sim = (() => {
         s.hint = s.rt < 7.5 ? Input.label(dev, 'move') + ' 이동 · 바깥일수록 더 밀려요' : s.rt < 17 ? Input.label(dev, 'skill') + ' 누르고 있기: ' + KINDS[k].skill + ' · ' + KINDS[k].tip : s.rt < 24 ? 'DJ가 "하나, 둘" 세면 팡! 게이지는 아껴 쓰세요' : '';
       } else s.hint = s.rt < 6 ? ['', '기울면 낮은 쪽으로 미끄러져요', '열린 난간 쪽은 그대로 밖이에요'][s.round - 1] : '';
       const alive = s.animals.filter(a => a.mode !== 'out' && a.mode !== 'fall').length;
-      if (alive === 0) { s.phase = 'fail'; s.phaseT = 0; s.failed = true; d.wT = 0.2 * s.spinDir; d.tiltT = 0; dj.tiltWarn = 0; s.tele = null; dj.ring = -1; mood(s, 'laugh'); say(s, '전원 탈락~! 한 번 더?'); callout(s, '전원 탈락!', 'fail'); sfx('lose'); s.hint = ''; }
+      if (alive === 0) { s.phase = 'fail'; s.phaseT = 0; s.failed = true; d.wT = 0.2 * s.spinDir; d.tiltT = 0; dj.tiltWarn = 0; s.tele = null; dj.ring = -1; mood(s, 'laugh'); say(s, '전원 풍덩~! 이번 판은 내가 이겼다!'); callout(s, 'DJ 여우 승리!', 'fail'); s.gained = 'DJ 여우 승리 · ' + s.round + '절에서 전원 탈락'; sfx('lose'); s.hint = ''; }
       else if (s.timeLeft <= 0) roundClear(s, alive);
     } else if (s.phase === 'clear') {
-      if (s.phaseT > 2.4) { s.phase = 'rest'; s.phaseT = 0; for (const a of s.animals) if (a.mode === 'out' || a.mode === 'fall' || a.mode === 'hang') { place(s, a); a.shield = 0.5; fx('saved', a.x, 0, a.z); } }
+      if (s.phaseT > 2.4) { s.phase = 'rest'; s.phaseT = 0; for (const a of s.animals) if (a.mode === 'out' || a.mode === 'fall') a.gone = 1; else if (a.mode === 'hang') { place(s, a); a.shield = 0.5; fx('saved', a.x, 0, a.z); } }
     } else if (s.phase === 'rest') {
       for (const a of s.animals) { a.gauge = Math.min(1, a.gauge + dt); a.tired = 0; }
       const skip = s.phaseT > 1.2 && s.animals.some(a => a.dev && a.skHit);

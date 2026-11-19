@@ -280,7 +280,7 @@ const scenes = {
   over: {
     update(dt) {
       Sim.step(state, dt);
-      if (pressed('KeyR') || pressed('Enter') || pressed('Space')) { Sim.startRound(state, state.round); scene = 'play'; Snd.play('horn'); }
+      if (pressed('KeyR') || pressed('Enter') || pressed('Space')) { reset(); scene = 'play'; Snd.play('horn'); }
     },
     cam: 'play',
   },

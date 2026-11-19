@@ -78,11 +78,11 @@ const Hud = (() => {
   function panelHtml(scene, s) {
     const h = s.animals.find(a => a.dev), key = Input.label(h ? h.dev : 'kb1', 'skill');
     if (scene === 'pause') return ['', '<h1>일시정지</h1><table><tr><td>이동</td><td><kbd>WASD</kbd> <kbd>방향키</kbd> 스틱</td></tr><tr><td>스킬 (누르는 동안)</td><td><kbd>Space</kbd> <kbd>Enter</kbd> A 버튼</td></tr><tr><td>신호 "모여!"</td><td><kbd>E</kbd> <kbd>오른쪽 Shift</kbd> X 버튼</td></tr><tr><td>음소거</td><td><kbd>M</kbd></td></tr></table><div class="foot"><kbd>P</kbd> 또는 <kbd>Esc</kbd> 계속하기</div>'];
-    if (scene === 'over') return ['', '<h1 class="bad">전원 탈락!</h1><div class="line">DJ 여우가 배를 잡고 웃는다. 한 번 더?</div>' + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>`) + '<div class="foot"><kbd>R</kbd> 또는 <kbd>Enter</kbd> 이번 곡 다시</div>'];
-    if (scene === 'results') return ['low', '<h1 class="good">DJ 여우 항복!</h1>' + `<div class="line">팀 별 ${s.score}개 · 구조 ${s.rescues}회 · 별을 가장 많이 모은 동물은?</div>` + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>`, true) + '<div class="foot"><kbd>Enter</kbd> 처음으로</div>'];
+    if (scene === 'over') return ['', '<h1 class="bad">DJ 여우 승리!</h1><div class="line">' + s.round + '절에서 모두 떨어졌다. 여우가 배를 잡고 웃는다</div>' + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>${a.gone || a.mode === 'out' ? '<br>탈락' : ''}`) + '<div class="foot"><kbd>R</kbd> 또는 <kbd>Enter</kbd> 처음부터 다시</div>'];
+    if (scene === 'results') return ['low', '<h1 class="good">DJ 여우 항복!</h1>' + `<div class="line">팀 별 ${s.score}개 · 구조 ${s.rescues}회 · 별을 가장 많이 모은 동물은?</div>` + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>${a.gone || a.mode === 'out' ? '<br>탈락' : ''}`, true) + '<div class="foot"><kbd>Enter</kbd> 처음으로</div>'];
     if (scene === 'play' && s.result && ((s.phase === 'clear' && s.phaseT > 0.9) || s.phase === 'rest')) {
       const left = s.phase === 'rest' ? Math.max(0, Math.ceil(tune.rest_seconds - s.phaseT)) : Math.ceil(tune.rest_seconds);
-      return ['top', `<h1 class="good">${s.result.round}절 클리어!</h1><div class="line">생존 ${s.result.alive} / 4 · 팀 별 ${s.score}개 · 구조 ${s.rescues}회</div>` + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>`, true) +
+      return ['top', `<h1 class="good">${s.result.round}절 클리어!</h1><div class="line">생존 ${s.result.alive} / 4 · 팀 별 ${s.score}개 · 구조 ${s.rescues}회</div>` + rows(s, a => `별 <b>${a.stars}</b> · 구조 <b>${a.rescues}</b>${a.gone || a.mode === 'out' ? '<br>탈락' : ''}`, true) +
         `<div class="foot">${s.result.last ? '결과 발표까지' : '다음 곡까지'} ${left}초 · <kbd>${key}</kbd> 바로 넘기기</div>`];
     }
     return null;
