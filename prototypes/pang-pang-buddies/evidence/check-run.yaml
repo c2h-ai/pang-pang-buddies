@@ -1,0 +1,175 @@
+# The one-shot's small check (check-run/1).
+# Written by one-shot-check.sh --record: the results are /prototype's reading of
+# evidence/self-check.tsv; never edited by hand.
+kind: check-run/1
+engine: web
+browser: "HeadlessChrome/157.0.0.0"
+time: "2026-11-19 18:00:38"
+checks:
+  - id: boots
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: shot
+    result: pass
+    evidence:
+      - "evidence/play.png"
+  - id: outlines
+    result: pass
+    evidence:
+      - "evidence/figures.png"
+  - id: brief-words
+    result: pass
+    evidence:
+      - "evidence/brief-words.tsv"
+  - id: emoji
+    result: pass
+    evidence:
+      - "evidence/self-check.tsv"
+  - id: nearest-game
+    result: pass
+    evidence:
+      - "evidence/nearest-game.txt"
+brief_checklist:
+  - id: L1
+    result: pass
+    evidence: "evidence/look-play.png"
+    item: "Look:"
+  - id: L2
+    result: pass
+    evidence: "evidence/look-figures.png"
+    item: "References: 캐릭터.mov(무광 클레이, 콩알 몸통, 큰 유광 눈, 짧은 발, 부드러운 그림자) · 배경.mov(빽빽한 저층 건물, 고가 철도, 밝은 초록 나무, 밤의 창문 불빛) · 월미도 디스코 팡팡(DJ 입담, 튕기는 원판, 바닷가 유원지) · Party Animals(넘어지고 금방 일어나는 몸 개그) *(guessed)* · Overcooked(서로가 필요한 바쁜 협동) *(guessed)*"
+  - id: L3
+    result: pass
+    evidence: "evidence/play.png"
+    item: "View: 3D · Camera: 고정 3/4, 약 45°, 원판 중심"
+  - id: F1
+    result: pass
+    evidence: "sim.js:149"
+    item: "디스코 팡팡 원판 물리: 회전(원심력으로 밀림), 팡(공중에 뜸), 기울이기, 난간 열림"
+  - id: F2
+    result: pass
+    evidence: "evidence/skill-trunk.png"
+    item: "동물 4마리와 고유 스킬, 쓰면 닳고 쉬면 차는 게이지"
+  - id: F3
+    result: pass
+    evidence: "evidence/first-rescue.png"
+    item: "매달림과 구조: 떨어져도 끝이 아니고, 동료가 끌어올린다"
+  - id: F4
+    result: pass
+    evidence: "sim.js:59"
+    item: "DJ 여우: 카운트, 페이크, 지목, 말풍선 멘트"
+  - id: F5
+    result: pass
+    evidence: "sim.js:533"
+    item: "3라운드와 사이 휴식: 판이 느려지고 게이지가 차고 탈락자가 돌아온다"
+  - id: F6
+    result: pass
+    evidence: "evidence/lobby.png"
+    item: "한 화면 최대 4인 참가(키보드 2 + 게임패드), 빈자리는 'BOT' 표시 봇, \"모여!\" 신호에 봇이 달려온다"
+  - id: F7
+    result: pass
+    evidence: "evidence/results.png"
+    item: "자기 색과 머리 위 표식, 결과 화면에 각자의 구조 횟수와 버틴 시간"
+  - id: F8
+    result: not_run
+    mark: not assessed
+    why: "합성 디스코 비트와 효과음: 오프라인 렌더는 소리가 났으나 귀로 듣지 못함"
+    evidence: "audio.js:45"
+    item: "합성 디스코 비트, 에어혼, 스크래치, 동물별 효과음 (Web Audio)"
+  - id: S1
+    result: pass
+    evidence: "evidence/skill-trunk.png"
+    item: "코끼리는 코로 잡고 있는다 (코코: 코 길이 안의 난간을 잡고 버팀. 몸에 닿은 동료도 함께 버티되 그만큼 빨리 닳음. 가장 오래 버티고 가장 느림) · in the slice"
+  - id: S2
+    result: pass
+    evidence: "evidence/skill-fly.png"
+    item: "새는 잠시 날으는 스킬, 동료를 잡고서 잠깐 난다 (삐삐: 약 2초 비행, 이륙 때 가까운 동료를 들고 남. 무거울수록 빨리 지침) · in the slice"
+  - id: S3
+    result: pass
+    evidence: "sim.js:345"
+    item: "문어는 빨판 (무너: 누르는 동안 바닥에 붙어 밀리지도 뜨지도 않고 천천히 걸음. 한 팔로 옆 동료 하나를 잡아 줌) · in the slice *(provisional)*"
+  - id: S4
+    result: pass
+    evidence: "sim.js:356"
+    item: "원숭이는 긴 꼬리 (몽이: 위험한 동료를 멀리서 낚아 옆으로 당김. 대상이 없으면 난간에 꼬리를 걸고 매달림) · in the slice *(provisional)*"
+  - id: S5
+    result: pass
+    evidence: "sim.js:383"
+    item: "얼마만의 제한 (게이지: 쓰는 동안 닳고 쉬면 참. 다 쓰면 잠깐 지침) · in the slice *(provisional)*"
+  - id: S6
+    result: pass
+    evidence: "evidence/play.png"
+    item: "DJ로부터 시간 안에 버티기 (곡 진행 바가 남은 시간) · in the slice"
+  - id: S7
+    result: pass
+    evidence: "evidence/lobby.png"
+    item: "4인 협동 (한 화면 + 봇) · in the slice *(provisional)*"
+  - id: M1
+    result: pass
+    evidence: "world.js:391"
+    item: "밤 유원지를 훑던 카메라가 원판에 멈춘다."
+  - id: M2
+    result: pass
+    evidence: "evidence/lobby.png"
+    item: "키를 눌러 참가하고 동물을 고르면 빈자리는 봇이 채운다."
+  - id: M3
+    result: pass
+    evidence: "evidence/play.png"
+    item: "판이 천천히 돌기 시작하고, 걷는 것만으로 \"바깥일수록 더 밀린다\"를 몸으로 안다."
+  - id: M4
+    result: pass
+    evidence: "sim.js:59"
+    item: "10초쯤 DJ가 \"하나, 둘, 팡!\""
+  - id: M5
+    result: pass
+    evidence: "evidence/play.png"
+    item: "약한 팡을 치고, 스킬 키 안내가 떠서 한 번 버텨 보면 게이지가 닳는 게 보인다."
+  - id: M6
+    result: pass
+    evidence: "sim.js:59"
+    item: "20초쯤 회전이 빨라지고 첫 강한 팡이 온다."
+  - id: M7
+    result: pass
+    evidence: "evidence/first-rescue.png"
+    item: "가벼운 동료가 난간 너머로 튕겨 매달리고 \"구해줘!\"가 뜬다."
+  - id: M8
+    result: pass
+    evidence: "evidence/first-rescue.png"
+    item: "달려가 끌어올리면(또는 내 스킬로 구하면) 모두 환호한다."
+  - id: M9
+    result: pass
+    evidence: "evidence/first-rescue.png"
+    item: "여기가 첫 보상이다."
+  - id: M10
+    result: pass
+    evidence: "sim.js:59"
+    item: "이후 연속 팡과 1절 마무리."
+  - id: C1
+    result: pass
+    evidence: "sim.js:199"
+    item: "첫 위기는 1절 20초쯤의 강한 팡이다(빠른 회전 중 바깥쪽에 있으면 난간을 넘는다)."
+  - id: C2
+    result: pass
+    evidence: "evidence/look-round3-gate.png"
+    item: "2절은 기울이기·역회전·첫 페이크, 피날레는 난간이 열리고 DJ가 한 마리를 지목하며 기술을 섞는다."
+  - id: C3
+    result: pass
+    evidence: "sim.js:529"
+    item: "탈락한 동물은 그 라운드를 쉬고 다음 라운드에 복귀, 4마리 모두 탈락하면 그 라운드를 처음부터 다시 한다."
+  - id: C4
+    result: not_run
+    mark: not assessed
+    why: "봇만으로 전원 생존 여부는 사람이 플레이해야 판단 가능; 사용자 요청으로 난이도를 낮춤"
+    item: "1절은 누구나 넘기되, 봇에게만 맡겨서는 전원 생존(별 3개)이 나오지 않는다."
+  - id: C5
+    result: not_run
+    mark: not assessed
+    why: "표시(provisional)일 뿐 항목 아님"
+    item: "*(provisional)*"
+measures:
+  - id: step-time
+    value: 1.500
+    unit: ms
+    by: browser
+    detail: "mean 0.029 ms, slowest 1.500 ms, 668 steps"

@@ -1,0 +1,9 @@
+월미드의 디스코 팡팡 같은 게임	돌고(회전) 튕기는(팡) 원판 놀이기구, 테두리 쿠션과 난간, 세고 놀리고 속이는 DJ와 말풍선, 바닷가 유원지(관람차·부두·바다)	evidence/play.png
+실사 배경	코드로 지은 사실적인 3D 야경: 창문 불빛이 켜진 저층 건물 도시, 고가 철도와 열차, 가로등과 차량 불빛, 바다와 달빛, 그림자와 톤 매핑	evidence/look-play.png
+캐릭터는 3D 귀여운 이미지	무광 클레이 질감의 둥근 3D 몸, 크고 반짝이는 눈, 볼터치, 짧은 발로 만든 동물 넷과 DJ 여우	evidence/figures.png
+4인 협동	동물 네 마리가 한 팀으로 DJ를 상대하고, 한 화면에서 최대 4명이 참가하며 빈자리는 BOT 표시 봇	evidence/play.png
+고퀄게임	3D 조명·블룸·그림자, 손글씨 로고, 초상 카드 HUD, 합성 디스코 음악까지 갖춘 한 판 구성	evidence/look-title.png
+사람이 아니고 동물	등장 캐릭터 전원이 동물: 코끼리, 새, 문어, 원숭이, DJ 여우	evidence/figures.png
+캐릭터 참고 영상: /Users/jinseungim/Downloads/캐릭터.mov	참고 영상의 무광 클레이 질감, 콩알 몸통, 큰 유광 눈과 하이라이트, 짧은 발, 부드러운 그림자를 캐릭터에 적용	evidence/figures.png
+배경 스타일: /Users/jinseungim/Downloads/배경.mov	참고 영상의 빽빽한 저층 건물, 고가 철도, 밝은 초록 나무, 밤이면 켜지는 창문 불빛을 배경 도시에 적용	evidence/look-play.png
+3D	원판, 동물, DJ 부스, 도시와 바다까지 모두 three.js로 만든 3D 장면이며, 고정 3/4 시점의 원근 카메라로 본다	evidence/play.png

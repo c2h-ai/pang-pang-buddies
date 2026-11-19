@@ -1,0 +1,349 @@
+<!doctype html>
+<!-- PROTOTYPE - NOT FOR PRODUCTION -->
+<!-- Question: DJ의 예고를 읽고 동물 스킬로 서로를 구하는 60초가, 봇과 혼자 해도 여럿이 해도 웃기고 다시 하고 싶은가? -->
+<!-- Date: 2026-11-19 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>팡팡 버디즈 (Pang Pang Buddies)</title>
+<style>
+  :root { --ink: #0a0e2a; --navy: #121a4a; --cream: #fff3dc; --pink: #ff2e7e; --mag: #ff4fa8; --cyan: #35f2e0; --gold: #ffc94d; }
+  html, body { margin: 0; height: 100%; background: #05071a; overflow: hidden; }
+  body { font-variant-numeric: tabular-nums; }
+  canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 100%; }
+  #ui { position: fixed; inset: 0; pointer-events: none; user-select: none; color: var(--cream); overflow: hidden;
+    font: 800 clamp(12px, 1.75vh, 30px)/1.25 "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif; letter-spacing: -0.01em; }
+  #ui .layer { position: absolute; inset: 0; display: none; }
+  #ui .layer.on { display: block; }
+  .glass { background: linear-gradient(180deg, rgba(24, 33, 92, 0.9), rgba(10, 14, 42, 0.92)); border: 0.14em solid rgba(255, 255, 255, 0.14); border-radius: 1.1em;
+    box-shadow: 0 0.5em 1.6em rgba(3, 5, 20, 0.55), inset 0 0.1em 0 rgba(255, 255, 255, 0.16); }
+  kbd { display: inline-block; font: inherit; font-size: 0.93em; padding: 0.06em 0.5em; border-radius: 0.45em; background: var(--cream); color: var(--ink); box-shadow: 0 0.16em 0 #b9a98a; margin: 0 0.1em; }
+  .star { display: inline-block; width: 1.5em; height: 1.5em; background: rgba(255, 255, 255, 0.16); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+  .star.on { background: linear-gradient(180deg, #fff1a8, var(--gold)); }
+
+  /* ---- play HUD ---- */
+  #song { position: absolute; top: 1.3em; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.9em; padding: 0.6em 1.2em 0.6em 0.7em; min-width: 30em; }
+  #song .rec { width: 2.9em; height: 2.9em; border-radius: 50%; flex: none; background: radial-gradient(circle, var(--gold) 0 24%, #0a0e2a 25% 34%, #1b2360 35% 44%, #0a0e2a 45% 58%, #1b2360 59% 66%, #0a0e2a 67%); box-shadow: 0 0 0 0.12em rgba(255, 255, 255, 0.2); }
+  #song .rec::after { content: ""; display: block; width: 0.26em; height: 1.1em; background: var(--ink); margin: 0.22em auto 0; border-radius: 0.2em; }
+  #song .info { flex: 1; min-width: 0; }
+  #song .ttl { font-size: 1.05em; white-space: nowrap; }
+  #song .ttl b { color: var(--cyan); font-weight: 900; margin-right: 0.5em; }
+  #song .track { position: relative; height: 0.56em; margin-top: 0.45em; border-radius: 1em; background: rgba(255, 255, 255, 0.14); }
+  #song .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 1em; background: linear-gradient(90deg, var(--cyan), var(--mag)); }
+  #song .head { position: absolute; top: 50%; width: 1.1em; height: 1.1em; margin: -0.55em 0 0 -0.55em; border-radius: 50%; background: var(--cream); border: 0.16em solid var(--mag); box-sizing: border-box; box-shadow: 0 0.14em 0 rgba(10, 14, 42, 0.6); }
+  #song .time { font-size: 2.1em; font-weight: 900; min-width: 2.6em; text-align: right; }
+  #song.low .time { color: var(--pink); animation: beat 0.5s infinite; }
+  #round { position: absolute; top: 1.3em; left: 1.4em; padding: 0.55em 1em; }
+  #round .lab { font-size: 0.96em; color: var(--cyan); letter-spacing: 0.12em; }
+  #round .stars { margin-top: 0.2em; white-space: nowrap; }
+  #round .stars .star { width: 1.25em; height: 1.25em; }
+  #round .stars i { display: inline-block; width: 0.5em; }
+  #keys { position: absolute; top: 1.5em; right: 1.5em; font-size: 1em; padding: 0.5em 0.9em; opacity: 0.92; }
+  .cards { position: absolute; bottom: 1.3em; display: flex; gap: 0.8em; }
+  #cards-l { left: 1.4em; } #cards-r { right: 1.4em; }
+  .card { position: relative; display: flex; align-items: center; gap: 0.7em; padding: 0.55em 0.9em 0.55em 0.55em; width: 14.6em; border-color: color-mix(in srgb, var(--c) 70%, transparent); }
+  .card .face { width: 3.9em; height: 3.9em; border-radius: 50%; flex: none; box-shadow: 0 0 0 0.16em var(--c); background: var(--c); }
+  .card .meta { flex: 1; min-width: 0; }
+  .card .nm { font-size: 1.12em; font-weight: 900; white-space: nowrap; }
+  .card .tag { font-size: 0.85em; padding: 0.08em 0.5em; border-radius: 0.5em; background: var(--c); color: var(--ink); vertical-align: 0.14em; margin-left: 0.3em; }
+  .card .tag.bot { background: #39428a; color: var(--cream); }
+  .card .sk { font-size: 0.95em; white-space: nowrap; margin-top: 0.1em; }
+  .card .sk kbd { font-size: 1em; }
+  .gauge { position: relative; height: 0.62em; margin-top: 0.38em; border-radius: 1em; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+  .gauge i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 1em; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #fff), var(--c)); }
+  .card.use .gauge i { background: linear-gradient(90deg, #fff, var(--cyan)); }
+  .card.tired .gauge { animation: blink 0.25s infinite; background: rgba(255, 46, 126, 0.55); }
+  .card .cnt { position: absolute; right: 0.6em; top: 0.45em; font-size: 1.05em; font-weight: 900; display: flex; align-items: center; gap: 0.2em; color: var(--gold); }
+  .card .cnt .star { width: 1em; height: 1em; }
+  .crown { position: absolute; left: 0.5em; top: -0.95em; width: 1.9em; height: 1.2em; display: none; background: linear-gradient(180deg, #fff1a8, var(--gold)); clip-path: polygon(0 100%, 0 20%, 25% 55%, 50% 0, 75% 55%, 100% 20%, 100% 100%); filter: drop-shadow(0 0.1em 0 var(--ink)); }
+  #panel .row { position: relative; }
+  #panel .row .crown { display: block; left: 50%; top: -1.1em; margin-left: -0.95em; }
+  #panel .row .rank { font-size: 0.9em; color: var(--cyan); }
+  #round .stars b { color: var(--gold); font-size: 1.2em; }
+  .card .st { position: absolute; right: 0.6em; top: -0.8em; font-size: 0.95em; padding: 0.12em 0.6em; border-radius: 0.6em; background: var(--pink); color: #fff; display: none; }
+  .card.hang .st, .card.out .st { display: block; }
+  .card.hang { animation: shake 0.3s infinite; border-color: var(--pink); }
+  .card.out { filter: saturate(0.25) brightness(0.72); }
+  .card.out .st { background: #56597a; }
+  #callout { position: absolute; left: 50%; top: 31%; transform: translate(-50%, -50%); text-align: center; white-space: nowrap; font-weight: 900; font-size: 4.6em; letter-spacing: -0.02em;
+    -webkit-text-stroke: 0.2em var(--ink); paint-order: stroke fill; text-shadow: 0 0.09em 0 var(--ink); opacity: 0; }
+  #callout.count { color: var(--cream); font-size: 5.6em; } #callout.pang { color: var(--mag); }
+  #callout.fake { color: var(--cyan); } #callout.warn { color: var(--gold); font-size: 3.4em; } #callout.spot { color: #fff; font-size: 3.4em; }
+  #callout.win { color: var(--gold); } #callout.fail { color: var(--pink); } #callout.start { color: var(--cyan); }
+  #callout svg { height: 1.9em; display: block; overflow: visible; }
+  #bubble { position: absolute; padding: 0.55em 1em; font-size: 1.12em; white-space: nowrap; border-radius: 1.1em 1.1em 1.1em 0.2em; background: var(--cream); color: var(--ink);
+    box-shadow: 0 0.3em 0 rgba(10, 14, 42, 0.35); transform-origin: 0 100%; opacity: 0; transition: opacity 0.15s, transform 0.2s cubic-bezier(0.2, 1.6, 0.4, 1); transform: scale(0.6); }
+  #bubble.on { opacity: 1; transform: scale(1); }
+  #bubble b { display: block; font-size: 0.87em; color: #a8380f; letter-spacing: 0.04em; }
+  #hint { position: absolute; left: 50%; bottom: 1.3em; transform: translateX(-50%); padding: 0.5em 1.1em; font-size: 1.04em; max-width: 27em; text-align: center; line-height: 1.32; opacity: 0; transition: opacity 0.3s; border-color: rgba(53, 242, 224, 0.5); }
+  #hint.on { opacity: 1; }
+  .mark { position: absolute; left: 0; top: 0; will-change: transform; display: none; }
+  .mark .pin { position: absolute; left: -0.55em; top: -1.1em; width: 1.1em; height: 1.1em; background: var(--c); clip-path: polygon(0 0, 100% 0, 50% 100%); filter: drop-shadow(0 0.1em 0 var(--ink)); }
+  .mark .who { position: absolute; left: 0; top: -2.75em; transform: translateX(-50%); font-size: 0.97em; padding: 0.06em 0.55em; border-radius: 0.6em; background: var(--c); color: var(--ink); white-space: nowrap; box-shadow: 0 0.14em 0 var(--ink); }
+  .mark .bar { position: absolute; left: -1.7em; top: 0.25em; width: 3.4em; height: 0.44em; border-radius: 1em; background: rgba(10, 14, 42, 0.8); overflow: hidden; display: none; }
+  .mark .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--cyan); }
+  .mark.tired .bar i { background: var(--pink); }
+  .mark.hang .pin { background: var(--pink); animation: beat 0.4s infinite; }
+  .mark .sos { position: absolute; left: -2.2em; top: -6.4em; width: 4.4em; height: 4.4em; display: none; }
+  .mark.hang .sos { display: block; }
+  .mark .sos svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .mark .sos .bang { position: absolute; left: 50%; top: 50%; width: 0.5em; height: 1.5em; margin: -1.15em 0 0 -0.25em; border-radius: 0.3em; background: #fff; }
+  .mark .sos .bang::after { content: ""; position: absolute; left: 0; top: 1.75em; width: 0.5em; height: 0.5em; border-radius: 50%; background: #fff; }
+  .toast { position: absolute; left: 0; top: 0; font-size: 1.25em; font-weight: 900; white-space: nowrap; -webkit-text-stroke: 0.22em var(--ink); paint-order: stroke fill; display: none; }
+
+  /* ---- title and lobby ---- */
+  #title .logo { position: absolute; left: 50%; top: 4.5%; transform: translateX(-50%); width: min(74vw, 96vh); text-align: center; }
+  #title .logo svg { width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 0.5em 0.9em rgba(3, 5, 20, 0.6)); }
+  #title .logo .gl { animation: bob 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  #title .sub { margin-top: -0.2em; font-size: 1.35em; letter-spacing: 0.5em; color: var(--cyan); text-shadow: 0 0.12em 0 var(--ink); padding-left: 0.5em; }
+  #title .tagline { display: inline-block; margin-top: 0.7em; font-size: 1.25em; padding: 0.4em 1.2em; }
+  #title.lobby .logo { width: min(40vw, 52vh); top: 1.5%; }
+  #title.lobby .tagline, #title.lobby .sub { display: none; }
+  #title.lobby #seats { display: flex; }
+  #seats { position: absolute; left: 50%; bottom: 7.4em; transform: translateX(-50%); display: none; gap: 1em; }
+  .seat { position: relative; width: 16em; padding: 0.9em 0.9em 0.8em; text-align: center; border-color: color-mix(in srgb, var(--c) 55%, transparent); transition: transform 0.15s; }
+  .seat .face { display: inline-block; width: 6.2em; height: 6.2em; border-radius: 50%; box-shadow: 0 0 0 0.2em var(--c); background: var(--c); }
+  .seat .nm { font-size: 1.4em; font-weight: 900; margin-top: 0.3em; }
+  .seat .nm small { font-size: 0.69em; margin-left: 0.4em; }
+  .seat .sk { display: inline-block; margin-top: 0.3em; padding: 0.1em 0.8em; border-radius: 0.7em; background: var(--c); color: var(--ink); font-size: 0.95em; }
+  .seat .tip { margin-top: 0.5em; font-size: 0.95em; font-weight: 700; line-height: 1.35; min-height: 2.7em; }
+  .seat .who { margin-top: 0.55em; padding: 0.32em 0; border-radius: 0.7em; background: #2b3478; font-size: 0.97em; }
+  .seat.mine { transform: translateY(-0.9em); border-color: var(--c); border-width: 0.22em; box-shadow: 0 1em 1.9em rgba(3, 5, 20, 0.62), inset 0 0.1em 0 rgba(255, 255, 255, 0.16); }
+  .seat.mine .who { background: var(--c); color: var(--ink); }
+  .seat.ready .who { background: var(--cyan); color: var(--ink); }
+  #prompt { position: absolute; left: 50%; bottom: 3.6em; transform: translateX(-50%); font-size: 1.3em; white-space: nowrap; text-shadow: 0 0.12em 0 var(--ink); animation: beat 1.1s infinite; }
+  #how { position: absolute; left: 50%; bottom: 1.1em; transform: translateX(-50%); font-size: 0.96em; white-space: nowrap; padding: 0.4em 1.1em; font-weight: 700; }
+
+  /* ---- panels ---- */
+  #panel .box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 1.6em 2.2em 1.4em; text-align: center; min-width: 30em; }
+  #panel.top .box { top: 16%; transform: translate(-50%, 0); }
+  #panel.low .box { top: auto; bottom: 5%; transform: translate(-50%, 0); }
+  #panel h1 { margin: 0; font-size: 2.7em; font-weight: 900; letter-spacing: -0.02em; -webkit-text-stroke: 0.14em var(--ink); paint-order: stroke fill; }
+  #panel h1.good { color: var(--gold); } #panel h1.bad { color: var(--pink); }
+  #panel .big .star { width: 3.2em; height: 3.2em; margin: 0.3em 0.15em 0; }
+  #panel .line { margin-top: 0.5em; font-size: 1.12em; }
+  #panel .rows { display: flex; gap: 0.7em; justify-content: center; margin-top: 0.9em; }
+  #panel .row { width: 9.4em; padding: 0.6em 0.4em; border-radius: 0.9em; background: #1d2663; border: 0.12em solid color-mix(in srgb, var(--c) 60%, transparent); }
+  #panel .row .face { display: inline-block; width: 3.4em; height: 3.4em; border-radius: 50%; box-shadow: 0 0 0 0.14em var(--c); background: var(--c); }
+  #panel .row .nm { font-weight: 900; margin-top: 0.2em; }
+  #panel .row .v { font-size: 0.95em; font-weight: 700; }
+  #panel .row .v b { color: var(--cyan); font-size: 1.2em; }
+  #panel .foot { margin-top: 1.1em; font-size: 1em; }
+  #panel table { margin: 0.8em auto 0; border-collapse: collapse; text-align: left; font-size: 1em; font-weight: 700; }
+  #panel td { padding: 0.22em 0.7em; }
+  #figs .fig { position: absolute; left: 0; top: 0; transform: translate(-50%, 0); text-align: center; white-space: nowrap; padding: 0.35em 0.9em; font-size: 1.1em; }
+  #figs .fig small { display: block; font-size: 0.87em; font-weight: 700; }
+  #figs h2 { position: absolute; left: 50%; top: 1.2em; transform: translateX(-50%); margin: 0; font-size: 1.5em; padding: 0.4em 1.2em; }
+  @keyframes beat { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.07); } }
+  #song.low .time, .mark.hang .pin { animation-name: beat2; }
+  @keyframes beat2 { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-0.12em); } 75% { transform: translateX(0.12em); } }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-1.5deg); } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="ui"></div>
+<script src="vendor/three.js"></script>
+<script src="config.js"></script>
+<script>
+'use strict';
+// The one-shot's starter, kept: the fixed step, the clock hook, window.game and the play and
+// figures scenes. The game itself is in the scripts below (models, city, world, sim, audio, hud).
+
+// ---- Built to be checked ----------------------------------------------------------------
+const params = new URLSearchParams(location.search);
+const tune = new Proxy({}, { get: (_, k) => CONFIG[k].value }); // live: tune.speed is CONFIG.speed.value
+const STEP = 1 / 60;            // simulation step in seconds; motion is per second, never per frame
+const TITLE = '팡팡 버디즈 (Pang Pang Buddies)';
+const clock = window.GAME_CLOCK || { now: () => performance.now() / 1000 }; // a check may inject one
+const CHEAP = params.get('render') === 'cheap'; // a headless shot or check: 3D draws cheap; players never see it
+let seed;
+function rng() { // mulberry32; every gameplay random call reads this, never Math.random
+  seed = (seed + 0x6D2B79F5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), seed | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+const events = []; // window.game.events: anything the game wants a run to see
+
+// ---- Input: keys by position (event.code), OS key repeat ignored ------------------------
+const down = new Set(), hit = new Set();
+const pressed = code => hit.has(code); // true for one step after the key goes down
+addEventListener('keydown', e => {
+  startAudio();
+  if (!e.repeat) { down.add(e.code); hit.add(e.code); }
+  if (e.code === 'Space' || e.code === 'Enter' || e.code.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', e => down.delete(e.code));
+addEventListener('pointerdown', () => startAudio());
+addEventListener('blur', () => down.clear());
+// Up to four players on one machine: two on the keyboard, the rest on gamepads.
+const DEV = {
+  kb1: { up: ['KeyW'], dn: ['KeyS'], lf: ['KeyA'], rt: ['KeyD'], skill: ['Space'], sig: ['KeyE'], label: { move: 'WASD', skill: 'Space', sig: 'E' } },
+  kb2: { up: ['ArrowUp'], dn: ['ArrowDown'], lf: ['ArrowLeft'], rt: ['ArrowRight'], skill: ['Enter', 'NumpadEnter'], sig: ['ShiftRight', 'Slash'], label: { move: '방향키', skill: 'Enter', sig: '오른쪽 Shift' } },
+};
+const Input = {
+  pads: {}, prev: {},
+  poll() { // once a step: a snapshot of every gamepad
+    this.prev = this.pads; this.pads = {};
+    const list = navigator.getGamepads ? navigator.getGamepads() : [];
+    for (let i = 0; i < list.length && i < 4; i++) {
+      const g = list[i]; if (!g || !g.connected) continue;
+      const b = k => !!(g.buttons[k] && g.buttons[k].pressed), ax = k => Math.abs(g.axes[k] || 0) > 0.28 ? g.axes[k] : 0;
+      this.pads['pad' + i] = { x: ax(0) + (b(15) ? 1 : 0) - (b(14) ? 1 : 0), z: ax(1) + (b(13) ? 1 : 0) - (b(12) ? 1 : 0), skill: b(0) || b(1), sig: b(2) || b(3), start: b(9) };
+    }
+  },
+  devices() { return ['kb1', 'kb2'].concat(Object.keys(this.pads)); },
+  read(dev) { // { x, z, skill, skillHit, sigHit, lfHit, rtHit }
+    const d = DEV[dev], any = l => l.some(c => down.has(c)), anyHit = l => l.some(c => hit.has(c));
+    if (d) return { x: (any(d.rt) ? 1 : 0) - (any(d.lf) ? 1 : 0), z: (any(d.dn) ? 1 : 0) - (any(d.up) ? 1 : 0), skill: any(d.skill), skillHit: anyHit(d.skill), sigHit: anyHit(d.sig), lfHit: anyHit(d.lf), rtHit: anyHit(d.rt) };
+    const p = this.pads[dev], q = this.prev[dev] || { x: 0, z: 0, skill: false, sig: false };
+    if (!p) return { x: 0, z: 0, skill: false, skillHit: false, sigHit: false, lfHit: false, rtHit: false };
+    return { x: Math.max(-1, Math.min(1, p.x)), z: Math.max(-1, Math.min(1, p.z)), skill: p.skill, skillHit: p.skill && !q.skill, sigHit: p.sig && !q.sig, lfHit: p.x < -0.5 && !(q.x < -0.5), rtHit: p.x > 0.5 && !(q.x > 0.5) };
+  },
+  label(dev, what) { return DEV[dev] ? DEV[dev].label[what] : { move: '스틱', skill: 'A 버튼', sig: 'X 버튼' }[what]; },
+};
+
+// ---- Audio: started on first input, mute on M --------------------------------------------
+let audio = null, muted = false;
+function startAudio() {
+  if (!audio) {
+    const ac = window.GAME_AUDIO || new (window.AudioContext || window.webkitAudioContext)(); // a check may inject one
+    const out = ac.createGain(); out.gain.value = muted ? 0 : tune.volume;
+    out.connect(ac.destination); audio = { ac, out };
+  }
+  if (audio.ac.state === 'suspended') audio.ac.resume();
+}
+function setMuted(m) { muted = m; if (audio) audio.out.gain.value = m ? 0 : tune.volume; }
+addEventListener('tune', () => setMuted(muted)); // the tweak panel (an add-on), when added, moved a value: the volume follows
+</script>
+<script src="models.js"></script>
+<script src="city.js"></script>
+<script src="world.js"></script>
+<script src="audio.js"></script>
+<script src="sim.js"></script>
+<script src="hud.js"></script>
+<script>
+'use strict';
+// ---- Scenes: title (with the lobby), play, pause, over, results, and figures for the check ----
+let scene, state, viewT = 0, lastRT = 0, camFrom = null, camT = 9, lobbyK = 0;
+const lobby = { players: [], startT: -1 };   // players: { dev, kind, ready }
+let demo = null, lineup = null;
+function seats() { // four animals; whoever joined holds one, bots hold the rest
+  const list = lobby.players.length ? lobby.players : [{ dev: 'kb1', kind: 0 }];
+  return [0, 1, 2, 3].map(k => { const i = list.findIndex(p => p.kind === k); return i >= 0 ? { dev: list[i].dev, pl: i + 1 } : { dev: '', pl: 0 }; });
+}
+function reset() {
+  seed = Number(params.get('seed')) || CONFIG.seed;
+  state = Sim.newState(seats()); // state.gained: what this run gained, the high the ending shows
+  const r0 = Number(params.get('round')); if (r0 === 2 || r0 === 3) Sim.startRound(state, r0); // ?round=2 or 3: open on a later song
+}
+function freeKind(from, dir) { for (let n = 1; n <= 4; n++) { const k = (from + dir * n + 8) % 4; if (!lobby.players.some(p => p.kind === k)) return k; } return from; }
+const scenes = {
+  figures: {
+    update(dt) { state.t += dt; },
+    cam: 'lineup',
+  },
+  title: {
+    update(dt) {
+      Sim.stepDemo(demo, dt); state = demo; Snd.tick(demo.t, demo.dj.bpm, 0);
+      for (const dev of Input.devices()) {
+        const c = Input.read(dev), p = lobby.players.find(q => q.dev === dev);
+        if (!p) { if (c.skillHit && lobby.players.length < 4) { lobby.players.push({ dev, kind: freeKind(3, 1), ready: false }); Snd.play('join'); } continue; }
+        if (c.skillHit) { p.ready = !p.ready; Snd.play(p.ready ? 'ready' : 'ui'); }
+        else if (!p.ready && (c.lfHit || c.rtHit)) { p.kind = freeKind(p.kind, c.rtHit ? 1 : -1); Snd.play('ui'); }
+        else if (c.sigHit) { if (p.ready) p.ready = false; else lobby.players.splice(lobby.players.indexOf(p), 1); Snd.play('ui'); }
+      }
+      const all = lobby.players.length > 0 && lobby.players.every(p => p.ready);
+      if (!all) lobby.startT = -1; else if (lobby.startT < 0) lobby.startT = 0.7;
+      if (lobby.startT >= 0) { lobby.startT -= dt; if (lobby.startT <= 0) { lobby.startT = -1; reset(); scene = 'play'; camFrom = 'title'; camT = 0; Snd.play('horn'); } }
+    },
+    cam: 'title',
+  },
+  play: {
+    update(dt) {
+      if (pressed('KeyP') || pressed('Escape')) { scene = 'pause'; return; }
+      Sim.step(state, dt);
+      Snd.tick(state.t, state.dj.bpm, state.phase === 'run' ? state.round : state.phase === 'intro' ? 1 : 0);
+      if (state.phase === 'fail' && state.phaseT > 2.2) scene = 'over';
+      if (state.done) { scene = 'results'; camFrom = 'play'; camT = 0; Snd.play('horn'); }
+    },
+    cam: 'play',
+  },
+  pause: {
+    update() { if (pressed('KeyP') || pressed('Escape')) scene = 'play'; },
+    cam: 'play',
+  },
+  over: {
+    update(dt) {
+      Sim.step(state, dt);
+      if (pressed('KeyR') || pressed('Enter') || pressed('Space')) { Sim.startRound(state, state.round); scene = 'play'; Snd.play('horn'); }
+    },
+    cam: 'play',
+  },
+  results: {
+    update(dt) {
+      Sim.step(state, dt); Snd.tick(state.t, state.dj.bpm, 1);
+      if (state.phaseT > 1 && (pressed('Enter') || pressed('Space'))) { lobby.players.forEach(p => { p.ready = false; }); scene = 'title'; camFrom = 'win'; camT = 0; }
+    },
+    cam: 'win',
+  },
+};
+
+// ---- Loop: fixed step, frame time clamped ---------------------------------------------
+function step() {
+  if (pressed('KeyM')) { setMuted(!muted); hit.delete('KeyM'); }
+  Input.poll();
+  scenes[scene].update(STEP); hit.clear();
+  if (scene !== 'pause') { viewT += STEP; camT += STEP; }
+}
+let last, acc = 0, ALPHA = 1; // ALPHA: how far the frame is between the last two steps
+function tick() {
+  const now = clock.now();
+  acc += Math.min(now - last, 0.25); last = now; // a stall never fast-forwards the game
+  while (acc >= STEP) { step(); acc -= STEP; }
+  ALPHA = acc / STEP; // draw between steps, so the view never judders
+  drawFrame();
+}
+function drawFrame() {
+  const rt = viewT + (scene === 'pause' ? 0 : ALPHA * STEP), dt = Math.max(0, Math.min(1.5, rt - lastRT)); lastRT = rt; // effects keep time even when frames are far apart
+  const blendDur = camFrom === 'title' ? 2.6 : 1.6;
+  lobbyK += ((scene === 'title' && lobby.players.length ? 1 : 0) - lobbyK) * Math.min(1, dt * 5);
+  World.frame({ state, t: rt, dt, cam: scenes[scene].cam, camFrom: camT < blendDur ? camFrom : null, blend: Math.min(1, camT / blendDur), lobby: lobbyK });
+  Hud.draw({ scene, state, lobby, t: rt });
+}
+function frame() { tick(); requestAnimationFrame(frame); }
+// A headless browser on a time budget runs timers but almost no animation frames: a timer
+// ticks when no frame has come for 100 ms on a visible page; a hidden tab stays paused.
+function timer() { if (document.visibilityState === 'visible' && clock.now() - last > 0.1) tick(); }
+
+// ---- What a check can read and drive (?manual=1 stops the loop; players never see it) ----
+window.game = {
+  get scene() { return scene; },
+  get state() { return state; },
+  press(code) { hit.add(code); },
+  hold(code, on) { on ? down.add(code) : down.delete(code); },
+  get events() { return events; }, // the loop steps; a check empties it
+  step(n = 1, draw = true, alpha = 1) {
+    for (let i = 0; i < n; i++) step();
+    if (draw) { ALPHA = alpha; drawFrame(); }
+  },
+};
+
+World.init(document.getElementById('game'));
+Hud.init(World.portraits());
+addEventListener('resize', () => World.resize());
+seed = Number(params.get('seed')) || CONFIG.seed;
+demo = Sim.demoState(); lineup = Sim.lineupState();
+scene = params.get('scene') || 'title';
+if (!scenes[scene]) scene = 'title';
+if (scene === 'figures') state = lineup; else if (scene === 'title') state = demo; else reset();
+last = clock.now();
+if (params.get('manual') === '1') drawFrame();
+else { requestAnimationFrame(frame); setInterval(timer, 50); }
+</script>
+</body>
+</html>

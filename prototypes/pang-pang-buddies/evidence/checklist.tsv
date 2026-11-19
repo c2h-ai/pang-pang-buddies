@@ -1,0 +1,33 @@
+L1	pass	evidence/look-play.png	밤 유원지, 클레이 동물, 핫핑크 위험 링, LP판 원판, 블룸은 네온과 전구
+L2	pass	evidence/look-figures.png	캐릭터.mov의 클레이 질감과 큰 유광 눈, 배경.mov의 저층 건물·고가철도·나무·창문 불빛
+L3	pass	evidence/play.png	3D, 고정 3/4 시점, 원판 중심
+F1	pass	sim.js:149	회전과 원심 밀림, 팡, 기울이기, 난간 열림(3절)
+F2	pass	evidence/skill-trunk.png	동물 4마리 고유 스킬과 쓰면 닳고 쉬면 차는 게이지
+F3	pass	evidence/first-rescue.png	매달림, 동료 구조, 스킬 연타 자가 복귀
+F4	pass	sim.js:59	DJ 카운트, 페이크, 지목, 말풍선
+F5	pass	sim.js:533	3라운드와 휴식: 감속, 게이지 충전, 탈락자 복귀
+F6	pass	evidence/lobby.png	키보드 2와 게임패드 참가, BOT 표시, 모여 신호
+F7	pass	evidence/results.png	자기 색 표식, 결과의 구조 횟수와 별 순위
+F8	not_assessed	audio.js:45	합성 디스코 비트와 효과음: 오프라인 렌더는 소리가 났으나 귀로 듣지 못함
+S1	pass	evidence/skill-trunk.png	코로 난간 잡기, 닿은 동료 함께 버팀
+S2	pass	evidence/skill-fly.png	약 2초 비행, 동료 들고 날기
+S3	pass	sim.js:345	빨판으로 붙어 천천히 걷기, 한 팔로 동료 잡기
+S4	pass	sim.js:356	꼬리로 동료 낚기, 없으면 난간 걸기
+S5	pass	sim.js:383	게이지와 지침
+S6	pass	evidence/play.png	곡 진행 바와 남은 시간
+S7	pass	evidence/lobby.png	한 화면 최대 4인과 봇
+M1	pass	world.js:391	타이틀 카메라가 유원지를 훑음
+M2	pass	evidence/lobby.png	참가와 동물 선택, 빈자리 봇
+M3	pass	evidence/play.png	천천히 도는 판과 바깥일수록 밀린다는 안내
+M4	pass	sim.js:59	10초쯤 하나 둘 카운트 후 약한 팡
+M5	pass	evidence/play.png	스킬 키 안내와 게이지 표시
+M6	pass	sim.js:59	20초쯤 속도 증가와 첫 강한 팡
+M7	pass	evidence/first-rescue.png	가벼운 동료가 매달리고 구해줘 표시
+M8	pass	evidence/first-rescue.png	구조 성공과 환호
+M9	pass	evidence/first-rescue.png	첫 구조가 첫 보상, 구조 보너스 별
+M10	pass	sim.js:59	이후 연속 팡과 1절 마무리
+C1	pass	sim.js:199	1절 20초쯤 첫 강한 팡에서 한 마리가 난간을 넘음
+C2	pass	evidence/look-round3-gate.png	2절 기울이기·역회전·페이크, 피날레 난간 열림과 지목
+C3	pass	sim.js:529	탈락자는 다음 라운드 복귀, 전원 탈락이면 라운드 재시작
+C4	not_assessed	-	봇만으로 전원 생존 여부는 사람이 플레이해야 판단 가능; 사용자 요청으로 난이도를 낮춤
+C5	not_assessed	-	표시(provisional)일 뿐 항목 아님
