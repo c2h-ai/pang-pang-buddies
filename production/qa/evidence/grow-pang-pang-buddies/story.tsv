@@ -1,0 +1,175 @@
+browser	/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+time	2026-11-19 18:26:58
+render	cheap
+webgl	ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0) (0x0000C0DE)), SwiftShader driver)
+ua	HeadlessChrome/157.0.0.0
+scene	0	title
+state	0	title	{"t":0,"phase":"demo","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"pi
+scene	70	play
+state	70	play	{"t":0,"phase":"intro","phaseT":0,"rt":0,"round":1,"rounds":3,"timeLeft":60,"stars":[0,0,0],"score":0,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":-9,"spinDir":-1,"tele":null,"p
+playinput	332	KeyD
+frame	3481	3f0a96ed
+frame	3482	45d746a2
+frame	3483	4cff6aef
+frame	3484	cf4ba86a
+frame	3485	a98f708c
+frame	3486	b3d7d1d5
+frame	3487	9b444259
+frame	3488	f29944d9
+frame	3489	b535b516
+frame	3490	fcd91ab1
+frame	3491	614887e3
+frame	3492	c00a2d47
+frame	3493	83b85d57
+frame	3494	b357a2e8
+frame	3495	3393dff8
+frame	3496	b5d9fc1
+frame	3497	2b193a77
+frame	3498	2603e2f
+frame	3499	ab54d7c2
+frame	3500	964ff5db
+frame	3501	bf99f67c
+frame	3502	78962652
+frame	3503	dfac115c
+frame	3504	4de796e8
+frame	3505	44661f88
+frame	3506	cf4b57b9
+frame	3507	f39624ff
+frame	3508	5c8c64b4
+frame	3509	c74c0a43
+frame	3510	2d377604
+frame	3511	37076b76
+frame	3512	366ccf49
+frame	3513	b65d64ca
+frame	3514	f3ccd8c8
+frame	3515	196737a7
+frame	3516	1601c30d
+frame	3517	2ab58736
+frame	3518	cab5dda2
+frame	3519	4328e40d
+frame	3520	a8f33c17
+frame	3521	e1214c28
+frame	3522	e7230f0e
+frame	3523	5dd5e79c
+frame	3524	a6aa2228
+frame	3525	932d985e
+frame	3526	ba3b4379
+frame	3527	64a7aa7a
+frame	3528	c80c6b54
+frame	3529	296571fa
+frame	3530	df4739f1
+frame	3531	827a127f
+frame	3532	38b107ea
+frame	3533	fcdeab06
+frame	3534	897d74c
+frame	3535	3fee2e74
+frame	3536	424fef81
+frame	3537	5912ada6
+frame	3538	77c9eca5
+frame	3539	361d834a
+frame	3540	d842eb88
+frame	3541	7c4e750e
+frame	3542	b468289b
+frame	3543	ff0209b8
+frame	3544	46d65c6b
+frame	3545	b3fbcd3a
+frame	3546	19c0716d
+frame	3547	ecf4b7e2
+frame	3548	5ff3fcd9
+frame	3549	68129091
+frame	3550	c322130
+frame	3551	bd8b425
+frame	3552	50adb9bb
+frame	3553	e20d084f
+frame	3554	7e0e05a3
+frame	3555	a962087b
+frame	3556	cac71d61
+frame	3557	c6891ee0
+frame	3558	efa597b0
+frame	3559	a077b113
+frame	3560	3dbc2e42
+frame	3561	502189ce
+frame	3562	2d377192
+frame	3563	127e36dc
+frame	3564	71fbf205
+frame	3565	473fc811
+frame	3566	601bf027
+frame	3567	b81e4780
+frame	3568	c69c83b5
+frame	3569	4322e51
+frame	3570	2ceb44f5
+frame	3571	abe0550
+frame	3572	1bce4a01
+frame	3573	8ecd6fee
+frame	3574	ee931053
+frame	3575	7bf8efb3
+frame	3576	683fd2f
+frame	3577	9217bf60
+frame	3578	e45dae66
+frame	3579	81fb3a70
+frame	3580	77801852
+frame	3581	210c7685
+frame	3582	233649bd
+frame	3583	426575db
+frame	3584	8aa336f2
+frame	3585	15c6a37e
+frame	3586	4dd82b4b
+frame	3587	6b9ecc9f
+frame	3588	50e6197f
+frame	3589	2dc7240c
+frame	3590	77edd968
+frame	3591	9df2eed1
+frame	3592	3c09250d
+frame	3593	867638f
+frame	3594	1559be35
+frame	3595	282022a1
+frame	3596	18b52b
+frame	3597	e030056d
+frame	3598	a1b3052b
+frame	3599	b450cd7c
+frame	3600	e407a283
+state	3600	play	{"t":58.83,"phase":"run","phaseT":55.42,"rt":55.42,"round":1,"rounds":3,"timeLeft":4.58,"stars":[0,0,0],"score":40,"gained":"","goalReached":false,"done":false,"failed":false,"pangT":57,"spinDir":-1,"
+digits	log	900 34px "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif	proportional	9.996
+loop	log	none	no loop() step was marked
+first	log	none	no state.beat
+pressure	none	the game set no number state.margin in play
+steptime	3600	0.020	1.600
+frametime	59	89.5	187.4	900	59	59
+done	3600	play	stop	60.0	23409
+console	0	[.WebGL-0x10400534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x10400534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x10400534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+console	0	[.WebGL-0x10400534200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+measured	1280x720
+text	play	html	496,29,549,45	16.3	14.19	inside	ROUND 1
+text	play	html	556,29,627,45	16.6	18.17	inside	몸풀기 디스코
+text	play	html	770,27,826,59	32.6	5.65	inside	0:05
+text	play	html	31,24,113,39	15.1	14.19	inside	ROUND 1 / 3
+text	play	html	47,47,78,62	15.8	18.17	inside	팀 별
+text	play	html	78,44,97,63	18.6	13.04	inside	40
+text	play	html	1126,26,1133,41	14.6	17.23	inside	P
+text	play	html	1140,26,1190,41	15.8	15.29	inside	일시정지
+text	play	html	1197,26,1206,41	14.6	17.23	inside	M
+text	play	html	83,647,108,664	17.4	18.17	inside	코코
+text	play	html	117,648,129,663	14.8	9.97	inside	P1
+text	play	html	83,666,120,681	15.0	18.17	inside	코 잡기
+text	play	html	127,666,158,681	15.0	17.23	inside	Space
+text	play	html	186,631,206,646	15.0	6.76	inside	탈락
+text	play	html	208,646,213,662	16.3	13.04	inside	1
+text	play	html	298,648,322,665	17.4	18.17	inside	삐삐
+text	play	html	332,648,355,663	14.8	8.23	inside	BOT
+text	play	html	298,666,318,681	15.0	18.17	inside	날기
+text	play	html	419,646,427,662	16.3	13.04	inside	9
+text	play	html	910,648,934,665	17.4	18.17	inside	무너
+text	play	html	944,648,967,663	14.8	8.23	inside	BOT
+text	play	html	910,666,954,681	15.0	18.17	inside	빨판 걷기
+text	play	html	1027,646,1039,662	16.3	13.04	inside	15
+text	play	html	1124,648,1148,665	17.4	18.17	inside	몽이
+text	play	html	1158,648,1181,663	14.8	8.23	inside	BOT
+text	play	html	1124,666,1168,681	15.0	18.17	inside	꼬리 낚기
+text	play	html	1242,646,1253,662	16.3	13.04	inside	15
+text	play	html	728,104,769,119	15.1	5.90	inside	DJ 여우
+text	play	html	728,119,894,136	17.7	17.23	inside	막판 스퍼트! 버틸 수 있을까~?
+screen	3600	play	2db47ec	drawn
+uncaught	0
+shot	/Users/jinseungim/development/dev-game/new-game9/production/qa/evidence/grow-pang-pang-buddies/story.png	900045

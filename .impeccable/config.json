@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-11-19T09:04:42.547Z",
         "reason": "Claude: the clip-paths are a 10-point star and a 7-point crown, regular geometric icons, not organic contours"
+      },
+      {
+        "rule": "organic-clip-path",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-19T09:18:14.498Z",
+        "reason": "Claude: same star and crown icons copied from the one-shot; regular geometric shapes, not organic contours"
       }
     ]
   }
