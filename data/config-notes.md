@@ -95,3 +95,6 @@ holds no comments. The values themselves are in `data/config.json`.
 - `cam_dist`: m back from the centre
 - `cam_fov`: degrees
 - `cam_shake`: x screen shake on a pang
+- combo_r1/r2/r3: hits in a combo pang (연속 팡팡), one every two beats, per round
+- crit_chance_r1/r2/r3: share of ordinary pangs that are critical, per round
+- crit_mult: x power of a critical pang

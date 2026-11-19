@@ -1639,17 +1639,20 @@ const Sim = (() => {
     const cues = [], b = 60 / s.dj.bpm, T = tune.round_seconds, snap = t => Math.round(t / b) * b;
     const top = [tune.spin_r1, tune.spin_r2, tune.spin_r3][n - 1], gap = [tune.pang_gap_r1, tune.pang_gap_r2, tune.pang_gap_r3][n - 1];
     const fakeP = [0, tune.fake_chance_r2, tune.fake_chance_r3][n - 1];
+    const critP = [tune.crit_chance_r1, tune.crit_chance_r2, tune.crit_chance_r3][n - 1], comboN = Math.round([tune.combo_r1, tune.combo_r2, tune.combo_r3][n - 1]);
     const push = (t, type, o) => cues.push(Object.assign({ t: Math.max(0, t), type }, o || {}));
     const pang = (t, power, o) => { // t is the impact, counted in on the beats before it
       o = o || {}; const cnt = o.count || 2;
       push(t - cnt * b, 'ring', { at: t, fake: o.fake ? 1 : 0, dur: cnt * b, quick: 0, teach: o.teach ? 1 : 0 });
       for (let i = 0; i < cnt; i++) push(t - (cnt - i) * b, 'count', { i: i + 1 });
       if (o.fake) { const late = snap(0.55 + rng() * 0.9) || b; push(t, 'fakeout'); push(t + late - 0.42, 'ring', { at: t + late, fake: 0, dur: 0.42, quick: 1, teach: 0 }); push(t + late, 'impact', { power, tgt: -1 }); }
-      else push(t, 'impact', { power, tgt: o.spot ? -2 : -1 });
+      else { const crit = !o.teach && !o.combo && rng() < critP ? 1 : 0; if (crit) push(t - b, 'critWarn'); push(t, 'impact', { power: crit ? power * tune.crit_mult : power, tgt: o.spot ? -2 : -1, crit }); }
+      if (o.combo) push(t - cnt * b, 'comboWarn', { n: (o.more || 0) + 1 });
       for (let k = 1; k <= (o.more || 0); k++) { push(t + (k - 1) * 2 * b + 0.05, 'ring', { at: t + k * 2 * b, fake: 0, dur: 2 * b - 0.05, quick: 0, teach: 0 }); push(t + k * 2 * b, 'impact', { power: power * 0.92, tgt: -1 }); }
     };
     const tilt = (t) => { const dir = Math.floor(rng() * 4) * Math.PI / 2 + (rng() - 0.5) * 0.5; push(t - 1.2, 'tiltWarn', { dir }); push(t, 'tiltOn', { dir }); push(t + tune.tilt_hold, 'tiltOff'); };
     const scratch = t => push(t, 'scratch');
+    const combo = (t, power) => pang(t, power, { more: comboN - 1, combo: 1 }); // 연속 팡팡: comboN hits, one every two beats
     const spot = (t, power) => { push(t - tune.spot_warn, 'spot'); pang(t, power, { spot: 1 }); };
     push(0, 'spin', { w: top * 0.5 });
     if (n === 1) {
@@ -1658,7 +1661,7 @@ const Sim = (() => {
       push(p1 + 3, 'spin', { w: top }); push(p1 + 3, 'say', { text: '속도 올립니다~' });
       pang(p2, 1, { teach: 1 });
       let t = p2 + gap, k = 0;
-      while (t < T - 9.5) { if (k === 2) pang(snap(t), 0.95, { more: 1 }); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
+      while (t < T - 9.5) { if (k === 2) combo(snap(t), 0.95); else pang(snap(t), 0.85 + rng() * 0.15); if (k % 2) push(t + 1.5, 'spin', { w: top * (0.8 + rng() * 0.3) }); t += gap * (0.9 + rng() * 0.25) + (k === 2 ? 2 * b : 0); k++; }
       push(T - 9, 'spin', { w: top * 1.25 }); push(T - 9, 'say', { text: '막판 스퍼트! 버틸 수 있을까~?' });
       pang(snap(T - 6.2), 1); pang(snap(T - 2.6), 1);
     } else if (n === 2) {
@@ -1673,7 +1676,7 @@ const Sim = (() => {
         else if (r < 0.52) tilt(st);
         else if (r < 0.74) { tilt(st); pang(snap(st + 1.6), 0.9); t += 1.2; }
         else if (r < 0.9) { scratch(st); pang(snap(st + 2.2), 0.95); t += 1.2; }
-        else pang(st, 0.9, { more: 1 });
+        else combo(st, 0.9);
         t += gap * (0.9 + rng() * 0.25); k++;
       }
       push(T - 9.5, 'spin', { w: top * 1.2 }); push(T - 9.5, 'say', { text: '10초 남았다! 버텨 봐~' });
@@ -1691,11 +1694,11 @@ const Sim = (() => {
         else if (r < 0.5) spot(st, 1);
         else if (r < 0.7) { tilt(st); pang(snap(st + 1.6), 0.95); t += 1.2; }
         else if (r < 0.85) { scratch(st); pang(snap(st + 2.2), 1); t += 1.2; }
-        else pang(st, 0.95, { more: 2 });
+        else combo(st, 0.95);
         t += gap * (0.9 + rng() * 0.25);
       }
       push(T - 9.5, 'spin', { w: top * 1.3 }); push(T - 9.5, 'say', { text: '마지막이다~! 다 떨어져라!' });
-      pang(snap(T - 7.4), 1); pang(snap(T - 4.2), 1, { more: 1 });
+      pang(snap(T - 7.4), 1); combo(snap(T - 4.6), 1);
     }
     cues.sort((p, q) => p.t - q.t);
     return cues;
@@ -1713,7 +1716,9 @@ const Sim = (() => {
     else if (c.type === 'ring') { s.tele = { at: c.at, start: s.rt, dur: Math.max(0.05, c.at - s.rt), fake: c.fake, quick: c.quick }; botsOnRing(s, c); }
     else if (c.type === 'count') { callout(s, ['하나!', '둘!', '셋!'][c.i - 1], 'count'); mood(s, 'count'); dj.count = c.i; sfx('count', c.i); }
     else if (c.type === 'fakeout') { callout(s, '안 해~', 'fake'); mood(s, 'laugh'); s.tele = null; sfx('fake'); if (rng() < 0.6) say(s, pick(['속았지~?', '어? 벌써 힘 뺐어요?', '아직이야~ 아직!'])); }
-    else if (c.type === 'impact') doPang(s, c.power, c.tgt === -2 ? dj.spot : -1);
+    else if (c.type === 'impact') doPang(s, c.power, c.tgt === -2 ? dj.spot : -1, c.crit);
+    else if (c.type === 'critWarn') { say(s, pick(['이번엔 세게 간다~!', '크리티컬 준비~!', '꽉 잡아~ 진짜 세다!'])); sfx('warn'); }
+    else if (c.type === 'comboWarn') say(s, c.n + '연타 콤보 간다~!');
     else if (c.type === 'tiltWarn') { dj.tiltWarn = 1; dj.tiltArrow = c.dir; callout(s, DIRNAME(c.dir) + '으로 기울어요!', 'warn'); sfx('warn'); }
     else if (c.type === 'tiltOn') { d.tiltT = tune.tilt_angle * Math.PI / 180; d.tiltDir = c.dir; dj.tiltWarn = 2; dj.tiltArrow = c.dir; sfx('tilt'); }
     else if (c.type === 'tiltOff') { d.tiltT = 0; dj.tiltWarn = 0; }
@@ -1725,9 +1730,10 @@ const Sim = (() => {
       if (on.length) { const a = pick(on); dj.spot = a.kind; dj.pointX = clamp(a.x / 6, -1, 1); mood(s, 'point'); callout(s, KINDS[a.kind].name + ' 지목!', 'spot'); say(s, KINDS[a.kind].name + ' 손님~ 준비됐나요?'); sfx('spot'); }
     }
   }
-  function doPang(s, power, tgt) {
+  function doPang(s, power, tgt, crit) {
     const d = s.disc;
-    s.pangT = s.t; d.hv += 5.2 * power; s.tele = null; mood(s, 'slam'); callout(s, '팡!', 'pang'); fx('pang', 0, 0, 0, power); sfx('pang', power);
+    s.pangT = s.t; d.hv += 5.2 * power; s.tele = null; mood(s, 'slam'); callout(s, crit ? '크리티컬 팡!' : '팡!', crit ? 'fail' : 'pang'); fx('pang', 0, 0, 0, power); sfx('pang', power);
+    if (crit) { fx('shake', 0, 0, 0, 1.1); sfx('gate'); }
     for (const a of s.animals) {
       const mult = power * (a.kind === tgt ? tune.spot_bonus : 1);
       if (a.mode === 'hang') { a.hangT -= tune.hang_pang_loss * power; continue; }
